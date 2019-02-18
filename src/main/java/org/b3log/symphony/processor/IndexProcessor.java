@@ -74,467 +74,470 @@ import java.util.*;
 @RequestProcessor
 public class IndexProcessor {
 
-    /**
-     * Logger.
-     */
-    private static final Logger LOGGER = Logger.getLogger(IndexProcessor.class);
-
-    /**
-     * Article query service.
-     */
-    @Inject
-    private ArticleQueryService articleQueryService;
-
-    /**
-     * User query service.
-     */
-    @Inject
-    private UserQueryService userQueryService;
-
-    /**
-     * User management service.
-     */
-    @Inject
-    private UserMgmtService userMgmtService;
-
-    /**
-     * Data model service.
-     */
-    @Inject
-    private DataModelService dataModelService;
-
-    /**
-     * Language service.
-     */
-    @Inject
-    private LangPropsService langPropsService;
-
-    /**
-     * Shows question articles.
-     *
-     * @param context the specified context
-     */
-    @RequestProcessing(value = {"/qna", "/qna/unanswered", "/qna/reward", "/qna/hot"}, method = HttpMethod.GET)
-    @Before({StopwatchStartAdvice.class, AnonymousViewCheck.class})
-    @After({PermissionGrant.class, StopwatchEndAdvice.class})
-    public void showQnA(final RequestContext context) {
-        final HttpServletRequest request = context.getRequest();
-        final HttpServletResponse response = context.getResponse();
-
-        final AbstractFreeMarkerRenderer renderer = new SkinRenderer(context);
-        context.setRenderer(renderer);
-        renderer.setTemplateName("qna.ftl");
-        final Map<String, Object> dataModel = renderer.getDataModel();
-
-        final int pageNum = Paginator.getPage(request);
-        int pageSize = Symphonys.getInt("indexArticlesCnt");
-        final JSONObject user = (JSONObject) context.attr(Common.CURRENT_USER);
-        if (null != user) {
-            pageSize = user.optInt(UserExt.USER_LIST_PAGE_SIZE);
-
-            if (!UserExt.finshedGuide(user)) {
-                context.sendRedirect(Latkes.getServePath() + "/guide");
-
-                return;
-            }
-        }
-
-        final int avatarViewMode = (int) context.attr(UserExt.USER_AVATAR_VIEW_MODE);
-
-        String sortModeStr = StringUtils.substringAfter(context.requestURI(), "/qna");
-        int sortMode;
-        switch (sortModeStr) {
-            case "":
-                sortMode = 0;
-
-                break;
-            case "/unanswered":
-                sortMode = 1;
-
-                break;
-            case "/reward":
-                sortMode = 2;
-
-                break;
-            case "/hot":
-                sortMode = 3;
-
-                break;
-            default:
-                sortMode = 0;
-        }
-
-        dataModel.put(Common.SELECTED, Common.QNA);
-        final JSONObject result = articleQueryService.getQuestionArticles(avatarViewMode, sortMode, pageNum, pageSize);
-        final List<JSONObject> allArticles = (List<JSONObject>) result.get(Article.ARTICLES);
-        dataModel.put(Common.LATEST_ARTICLES, allArticles);
-
-        final JSONObject pagination = result.getJSONObject(Pagination.PAGINATION);
-        final int pageCount = pagination.optInt(Pagination.PAGINATION_PAGE_COUNT);
-        final List<Integer> pageNums = (List<Integer>) pagination.get(Pagination.PAGINATION_PAGE_NUMS);
-        if (!pageNums.isEmpty()) {
-            dataModel.put(Pagination.PAGINATION_FIRST_PAGE_NUM, pageNums.get(0));
-            dataModel.put(Pagination.PAGINATION_LAST_PAGE_NUM, pageNums.get(pageNums.size() - 1));
-        }
-
-        dataModel.put(Pagination.PAGINATION_CURRENT_PAGE_NUM, pageNum);
-        dataModel.put(Pagination.PAGINATION_PAGE_COUNT, pageCount);
-        dataModel.put(Pagination.PAGINATION_PAGE_NUMS, pageNums);
-
-        dataModelService.fillHeaderAndFooter(context, dataModel);
-        dataModelService.fillRandomArticles(dataModel);
-        dataModelService.fillSideHotArticles(dataModel);
-        dataModelService.fillSideTags(dataModel);
-        dataModelService.fillLatestCmts(dataModel);
-
-        dataModel.put(Common.CURRENT, StringUtils.substringAfter(context.requestURI(), "/qna"));
-    }
-
-    /**
-     * Shows watch articles or users.
-     *
-     * @param context the specified context
-     */
-    @RequestProcessing(value = {"/watch", "/watch/users"}, method = HttpMethod.GET)
-    @Before({StopwatchStartAdvice.class, AnonymousViewCheck.class})
-    @After({PermissionGrant.class, StopwatchEndAdvice.class})
-    public void showWatch(final RequestContext context) {
-        final HttpServletRequest request = context.getRequest();
-        final HttpServletResponse response = context.getResponse();
-
-        final AbstractFreeMarkerRenderer renderer = new SkinRenderer(context);
-        context.setRenderer(renderer);
-        renderer.setTemplateName("watch.ftl");
-        final Map<String, Object> dataModel = renderer.getDataModel();
-
-        int pageSize = Symphonys.getInt("indexArticlesCnt");
-        final int avatarViewMode = (int) context.attr(UserExt.USER_AVATAR_VIEW_MODE);
-        final JSONObject user = (JSONObject) context.attr(Common.CURRENT_USER);
-        if (null != user) {
-            pageSize = user.optInt(UserExt.USER_LIST_PAGE_SIZE);
-
-            if (!UserExt.finshedGuide(user)) {
-                context.sendRedirect(Latkes.getServePath() + "/guide");
-
-                return;
-            }
-        }
-
-        dataModel.put(Common.WATCHING_ARTICLES, Collections.emptyList());
-        String sortModeStr = StringUtils.substringAfter(context.requestURI(), "/watch");
-        switch (sortModeStr) {
-            case "":
-                if (null != user) {
-                    final List<JSONObject> followingTagArticles = articleQueryService.getFollowingTagArticles(
-                            avatarViewMode, user.optString(Keys.OBJECT_ID), 1, pageSize);
-                    dataModel.put(Common.WATCHING_ARTICLES, followingTagArticles);
-                }
-
-                break;
-            case "/users":
-                if (null != user) {
-                    final List<JSONObject> followingUserArticles = articleQueryService.getFollowingUserArticles(
-                            avatarViewMode, user.optString(Keys.OBJECT_ID), 1, pageSize);
-                    dataModel.put(Common.WATCHING_ARTICLES, followingUserArticles);
-                }
-
-                break;
-        }
-
-        dataModelService.fillHeaderAndFooter(context, dataModel);
-        dataModelService.fillRandomArticles(dataModel);
-        dataModelService.fillSideHotArticles(dataModel);
-        dataModelService.fillSideTags(dataModel);
-        dataModelService.fillLatestCmts(dataModel);
-
-        dataModel.put(Common.SELECTED, Common.WATCH);
-        dataModel.put(Common.CURRENT, StringUtils.substringAfter(context.requestURI(), "/watch"));
-    }
-
-    /**
-     * Shows index.
-     *
-     * @param context the specified context
-     */
-    @RequestProcessing(value = {"", "/"}, method = HttpMethod.GET)
-    @Before({StopwatchStartAdvice.class})
-    @After({PermissionGrant.class, StopwatchEndAdvice.class})
-    public void showIndex(final RequestContext context) {
-        final HttpServletRequest request = context.getRequest();
-        final HttpServletResponse response = context.getResponse();
-        final JSONObject currentUser = (JSONObject) context.attr(Common.CURRENT_USER);
-        if (null != currentUser) {
-            // 自定义首页跳转 https://github.com/b3log/symphony/issues/774
-            final String indexRedirectURL = currentUser.optString(UserExt.USER_INDEX_REDIRECT_URL);
-            if (StringUtils.isNotBlank(indexRedirectURL)) {
-                context.sendRedirect(indexRedirectURL);
-
-                return;
-            }
-        }
-
-        final AbstractFreeMarkerRenderer renderer = new SkinRenderer(context);
-        context.setRenderer(renderer);
-        renderer.setTemplateName("index.ftl");
-        final Map<String, Object> dataModel = renderer.getDataModel();
-
-        final int avatarViewMode = (int) context.attr(UserExt.USER_AVATAR_VIEW_MODE);
-        final List<JSONObject> recentArticles = articleQueryService.getIndexRecentArticles(avatarViewMode);
-        dataModel.put(Common.RECENT_ARTICLES, recentArticles);
-
-        final List<JSONObject> perfectArticles = articleQueryService.getIndexPerfectArticles();
-        dataModel.put(Common.PERFECT_ARTICLES, perfectArticles);
-
-        dataModelService.fillHeaderAndFooter(context, dataModel);
-        dataModelService.fillIndexTags(dataModel);
-
-        dataModel.put(Common.SELECTED, Common.INDEX);
-    }
-
-    /**
-     * Shows recent articles.
-     *
-     * @param context the specified context
-     */
-    @RequestProcessing(value = {"/recent", "/recent/hot", "/recent/good", "/recent/reply"}, method = HttpMethod.GET)
-    @Before({StopwatchStartAdvice.class, AnonymousViewCheck.class})
-    @After({PermissionGrant.class, StopwatchEndAdvice.class})
-    public void showRecent(final RequestContext context) {
-        final HttpServletRequest request = context.getRequest();
-        final HttpServletResponse response = context.getResponse();
-
-        final AbstractFreeMarkerRenderer renderer = new SkinRenderer(context);
-        context.setRenderer(renderer);
-        renderer.setTemplateName("recent.ftl");
-        final Map<String, Object> dataModel = renderer.getDataModel();
-        final int pageNum = Paginator.getPage(request);
-        int pageSize = Symphonys.getInt("indexArticlesCnt");
-        final JSONObject user = (JSONObject) context.attr(Common.CURRENT_USER);
-        if (null != user) {
-            pageSize = user.optInt(UserExt.USER_LIST_PAGE_SIZE);
-
-            if (!UserExt.finshedGuide(user)) {
-                context.sendRedirect(Latkes.getServePath() + "/guide");
-
-                return;
-            }
-        }
-
-        final int avatarViewMode = (int) context.attr(UserExt.USER_AVATAR_VIEW_MODE);
-
-        String sortModeStr = StringUtils.substringAfter(context.requestURI(), "/recent");
-        int sortMode;
-        switch (sortModeStr) {
-            case "":
-                sortMode = 0;
-
-                break;
-            case "/hot":
-                sortMode = 1;
-
-                break;
-            case "/good":
-                sortMode = 2;
-
-                break;
-            case "/reply":
-                sortMode = 3;
-
-                break;
-            default:
-                sortMode = 0;
-        }
-
-        dataModel.put(Common.SELECTED, Common.RECENT);
-        final JSONObject result = articleQueryService.getRecentArticles(avatarViewMode, sortMode, pageNum, pageSize);
-        final List<JSONObject> allArticles = (List<JSONObject>) result.get(Article.ARTICLES);
-        final List<JSONObject> stickArticles = new ArrayList<>();
-        final Iterator<JSONObject> iterator = allArticles.iterator();
-        while (iterator.hasNext()) {
-            final JSONObject article = iterator.next();
-            final boolean stick = article.optInt(Article.ARTICLE_T_STICK_REMAINS) > 0;
-            article.put(Article.ARTICLE_T_IS_STICK, stick);
-            if (stick) {
-                stickArticles.add(article);
-                iterator.remove();
-            }
-        }
-
-        dataModel.put(Common.STICK_ARTICLES, stickArticles);
-        dataModel.put(Common.LATEST_ARTICLES, allArticles);
-
-        final JSONObject pagination = result.getJSONObject(Pagination.PAGINATION);
-        final int pageCount = pagination.optInt(Pagination.PAGINATION_PAGE_COUNT);
-        final List<Integer> pageNums = (List<Integer>) pagination.get(Pagination.PAGINATION_PAGE_NUMS);
-        if (!pageNums.isEmpty()) {
-            dataModel.put(Pagination.PAGINATION_FIRST_PAGE_NUM, pageNums.get(0));
-            dataModel.put(Pagination.PAGINATION_LAST_PAGE_NUM, pageNums.get(pageNums.size() - 1));
-        }
-
-        dataModel.put(Pagination.PAGINATION_CURRENT_PAGE_NUM, pageNum);
-        dataModel.put(Pagination.PAGINATION_PAGE_COUNT, pageCount);
-        dataModel.put(Pagination.PAGINATION_PAGE_NUMS, pageNums);
-
-        dataModelService.fillHeaderAndFooter(context, dataModel);
-        dataModelService.fillRandomArticles(dataModel);
-        dataModelService.fillSideHotArticles(dataModel);
-        dataModelService.fillSideTags(dataModel);
-        dataModelService.fillLatestCmts(dataModel);
-
-        dataModel.put(Common.CURRENT, StringUtils.substringAfter(context.requestURI(), "/recent"));
-    }
-
-    /**
-     * Shows hot articles.
-     *
-     * @param context the specified context
-     */
-    @RequestProcessing(value = "/hot", method = HttpMethod.GET)
-    @Before({StopwatchStartAdvice.class, AnonymousViewCheck.class})
-    @After({PermissionGrant.class, StopwatchEndAdvice.class})
-    public void showHotArticles(final RequestContext context) {
-        final HttpServletRequest request = context.getRequest();
-        final HttpServletResponse response = context.getResponse();
-
-        final AbstractFreeMarkerRenderer renderer = new SkinRenderer(context);
-        context.setRenderer(renderer);
-        renderer.setTemplateName("hot.ftl");
-        final Map<String, Object> dataModel = renderer.getDataModel();
-
-        int pageSize = Symphonys.getInt("indexArticlesCnt");
-        final JSONObject user = (JSONObject) context.attr(Common.CURRENT_USER);
-        if (null != user) {
-            pageSize = user.optInt(UserExt.USER_LIST_PAGE_SIZE);
-        }
-
-        final int avatarViewMode = (int) context.attr(UserExt.USER_AVATAR_VIEW_MODE);
-        final List<JSONObject> indexArticles = articleQueryService.getHotArticles(avatarViewMode, pageSize);
-        dataModel.put(Common.INDEX_ARTICLES, indexArticles);
-        dataModel.put(Common.SELECTED, Common.HOT);
-
-        Stopwatchs.start("Fills");
-        try {
-            dataModelService.fillHeaderAndFooter(context, dataModel);
-            if (!(Boolean) dataModel.get(Common.IS_MOBILE)) {
-                dataModelService.fillRandomArticles(dataModel);
-            }
-            dataModelService.fillSideHotArticles(dataModel);
-            dataModelService.fillSideTags(dataModel);
-            dataModelService.fillLatestCmts(dataModel);
-        } finally {
-            Stopwatchs.end();
-        }
-    }
-
-    /**
-     * Shows perfect articles.
-     *
-     * @param context the specified context
-     */
-    @RequestProcessing(value = "/perfect", method = HttpMethod.GET)
-    @Before({StopwatchStartAdvice.class, AnonymousViewCheck.class})
-    @After({PermissionGrant.class, StopwatchEndAdvice.class})
-    public void showPerfectArticles(final RequestContext context) {
-        final HttpServletRequest request = context.getRequest();
-        final HttpServletResponse response = context.getResponse();
-
-        final AbstractFreeMarkerRenderer renderer = new SkinRenderer(context);
-        context.setRenderer(renderer);
-        renderer.setTemplateName("perfect.ftl");
-        final Map<String, Object> dataModel = renderer.getDataModel();
-        final int pageNum = Paginator.getPage(request);
-        int pageSize = Symphonys.getInt("indexArticlesCnt");
-        final JSONObject user = (JSONObject) context.attr(Common.CURRENT_USER);
-        if (null != user) {
-            pageSize = user.optInt(UserExt.USER_LIST_PAGE_SIZE);
-            if (!UserExt.finshedGuide(user)) {
-                context.sendRedirect(Latkes.getServePath() + "/guide");
-
-                return;
-            }
-        }
-
-        final int avatarViewMode = (int) context.attr(UserExt.USER_AVATAR_VIEW_MODE);
-        final JSONObject result = articleQueryService.getPerfectArticles(avatarViewMode, pageNum, pageSize);
-        final List<JSONObject> perfectArticles = (List<JSONObject>) result.get(Article.ARTICLES);
-        dataModel.put(Common.PERFECT_ARTICLES, perfectArticles);
-        dataModel.put(Common.SELECTED, Common.PERFECT);
-        final JSONObject pagination = result.getJSONObject(Pagination.PAGINATION);
-        final int pageCount = pagination.optInt(Pagination.PAGINATION_PAGE_COUNT);
-        final List<Integer> pageNums = (List<Integer>) pagination.get(Pagination.PAGINATION_PAGE_NUMS);
-        if (!pageNums.isEmpty()) {
-            dataModel.put(Pagination.PAGINATION_FIRST_PAGE_NUM, pageNums.get(0));
-            dataModel.put(Pagination.PAGINATION_LAST_PAGE_NUM, pageNums.get(pageNums.size() - 1));
-        }
-
-        dataModel.put(Pagination.PAGINATION_CURRENT_PAGE_NUM, pageNum);
-        dataModel.put(Pagination.PAGINATION_PAGE_COUNT, pageCount);
-        dataModel.put(Pagination.PAGINATION_PAGE_NUMS, pageNums);
-
-        dataModelService.fillHeaderAndFooter(context, dataModel);
-        dataModelService.fillRandomArticles(dataModel);
-        dataModelService.fillSideHotArticles(dataModel);
-        dataModelService.fillSideTags(dataModel);
-        dataModelService.fillLatestCmts(dataModel);
-    }
-
-    /**
-     * Shows about.
-     *
-     * @param context the specified context
-     * @throws Exception exception
-     */
-    @RequestProcessing(value = "/about", method = HttpMethod.GET)
-    @Before(StopwatchStartAdvice.class)
-    @After(StopwatchEndAdvice.class)
-    public void showAbout(final RequestContext context) {
-        context.sendRedirect("https://hacpai.com/article/1440573175609");
-    }
-
-    /**
-     * Shows b3log.
-     *
-     * @param context the specified context
-     */
-    @RequestProcessing(value = "/b3log", method = HttpMethod.GET)
-    @Before(StopwatchStartAdvice.class)
-    @After({PermissionGrant.class, StopwatchEndAdvice.class})
-    public void showB3log(final RequestContext context) {
-        final HttpServletRequest request = context.getRequest();
-        final HttpServletResponse response = context.getResponse();
-
-        final AbstractFreeMarkerRenderer renderer = new SkinRenderer(context);
-        context.setRenderer(renderer);
-        renderer.setTemplateName("other/b3log.ftl");
-        final Map<String, Object> dataModel = renderer.getDataModel();
-
-        dataModelService.fillHeaderAndFooter(context, dataModel);
-        dataModelService.fillRandomArticles(dataModel);
-        dataModelService.fillSideHotArticles(dataModel);
-        dataModelService.fillSideTags(dataModel);
-        dataModelService.fillLatestCmts(dataModel);
-    }
-
-    /**
-     * Shows kill browser page with the specified context.
-     *
-     * @param context the specified context
-     */
-    @RequestProcessing(value = "/kill-browser", method = HttpMethod.GET)
-    @Before(StopwatchStartAdvice.class)
-    @After(StopwatchEndAdvice.class)
-    public void showKillBrowser(final RequestContext context) {
-        final HttpServletRequest request = context.getRequest();
-
-        final AbstractFreeMarkerRenderer renderer = new SkinRenderer(context);
-        renderer.setTemplateName("other/kill-browser.ftl");
-        context.setRenderer(renderer);
-
-        final Map<String, Object> dataModel = renderer.getDataModel();
-        final Map<String, String> langs = langPropsService.getAll(Locales.getLocale());
-
-        dataModel.putAll(langs);
-        Keys.fillRuntime(dataModel);
-        dataModelService.fillMinified(dataModel);
-    }
+	/**
+	 * Logger.
+	 */
+	private static final Logger LOGGER = Logger.getLogger(IndexProcessor.class);
+
+	/**
+	 * Article query service.
+	 */
+	@Inject
+	private ArticleQueryService articleQueryService;
+
+	/**
+	 * User query service.
+	 */
+	@Inject
+	private UserQueryService userQueryService;
+
+	/**
+	 * User management service.
+	 */
+	@Inject
+	private UserMgmtService userMgmtService;
+
+	/**
+	 * Data model service.
+	 */
+	@Inject
+	private DataModelService dataModelService;
+
+	/**
+	 * Language service.
+	 */
+	@Inject
+	private LangPropsService langPropsService;
+
+	/**
+	 * Shows question articles.
+	 *
+	 * @param context the specified context
+	 */
+	@RequestProcessing(value = {"/qna", "/qna/unanswered", "/qna/reward", "/qna/hot"}, method = HttpMethod.GET)
+	@Before({StopwatchStartAdvice.class, AnonymousViewCheck.class})
+	@After({PermissionGrant.class, StopwatchEndAdvice.class})
+	public void showQnA(final RequestContext context) {
+		final HttpServletRequest request = context.getRequest();
+		final HttpServletResponse response = context.getResponse();
+
+		final AbstractFreeMarkerRenderer renderer = new SkinRenderer(context);
+		context.setRenderer(renderer);
+		renderer.setTemplateName("qna.ftl");
+		final Map<String, Object> dataModel = renderer.getDataModel();
+
+		final int pageNum = Paginator.getPage(request);
+		int pageSize = Symphonys.getInt("indexArticlesCnt");
+		final JSONObject user = (JSONObject) context.attr(Common.CURRENT_USER);
+		if (null != user) {
+			pageSize = user.optInt(UserExt.USER_LIST_PAGE_SIZE);
+
+			if (!UserExt.finshedGuide(user)) {
+				context.sendRedirect(Latkes.getServePath() + "/guide");
+
+				return;
+			}
+		}
+
+		final int avatarViewMode = (int) context.attr(UserExt.USER_AVATAR_VIEW_MODE);
+
+		String sortModeStr = StringUtils.substringAfter(context.requestURI(), "/qna");
+		int sortMode;
+		switch (sortModeStr) {
+			case "":
+				sortMode = 0;
+
+				break;
+			case "/unanswered":
+				sortMode = 1;
+
+				break;
+			case "/reward":
+				sortMode = 2;
+
+				break;
+			case "/hot":
+				sortMode = 3;
+
+				break;
+			default:
+				sortMode = 0;
+		}
+
+		dataModel.put(Common.SELECTED, Common.QNA);
+		final JSONObject result = articleQueryService.getQuestionArticles(avatarViewMode, sortMode, pageNum, pageSize);
+		final List<JSONObject> allArticles = (List<JSONObject>) result.get(Article.ARTICLES);
+		dataModel.put(Common.LATEST_ARTICLES, allArticles);
+
+		final JSONObject pagination = result.getJSONObject(Pagination.PAGINATION);
+		final int pageCount = pagination.optInt(Pagination.PAGINATION_PAGE_COUNT);
+		final List<Integer> pageNums = (List<Integer>) pagination.get(Pagination.PAGINATION_PAGE_NUMS);
+		if (!pageNums.isEmpty()) {
+			dataModel.put(Pagination.PAGINATION_FIRST_PAGE_NUM, pageNums.get(0));
+			dataModel.put(Pagination.PAGINATION_LAST_PAGE_NUM, pageNums.get(pageNums.size() - 1));
+		}
+
+		dataModel.put(Pagination.PAGINATION_CURRENT_PAGE_NUM, pageNum);
+		dataModel.put(Pagination.PAGINATION_PAGE_COUNT, pageCount);
+		dataModel.put(Pagination.PAGINATION_PAGE_NUMS, pageNums);
+
+		dataModelService.fillHeaderAndFooter(context, dataModel);
+		dataModelService.fillRandomArticles(dataModel);
+		dataModelService.fillSideHotArticles(dataModel);
+		dataModelService.fillSideTags(dataModel);
+		dataModelService.fillLatestCmts(dataModel);
+
+		dataModel.put(Common.CURRENT, StringUtils.substringAfter(context.requestURI(), "/qna"));
+	}
+
+	/**
+	 * Shows watch articles or users.
+	 *
+	 * @param context the specified context
+	 */
+	@RequestProcessing(value = {"/watch", "/watch/users"}, method = HttpMethod.GET)
+	@Before({StopwatchStartAdvice.class, AnonymousViewCheck.class})
+	@After({PermissionGrant.class, StopwatchEndAdvice.class})
+	public void showWatch(final RequestContext context) {
+		final HttpServletRequest request = context.getRequest();
+		final HttpServletResponse response = context.getResponse();
+
+		final AbstractFreeMarkerRenderer renderer = new SkinRenderer(context);
+		context.setRenderer(renderer);
+		renderer.setTemplateName("watch.ftl");
+		final Map<String, Object> dataModel = renderer.getDataModel();
+
+		int pageSize = Symphonys.getInt("indexArticlesCnt");
+		final int avatarViewMode = (int) context.attr(UserExt.USER_AVATAR_VIEW_MODE);
+		final JSONObject user = (JSONObject) context.attr(Common.CURRENT_USER);
+		if (null != user) {
+			pageSize = user.optInt(UserExt.USER_LIST_PAGE_SIZE);
+
+			if (!UserExt.finshedGuide(user)) {
+				context.sendRedirect(Latkes.getServePath() + "/guide");
+
+				return;
+			}
+		}
+
+		dataModel.put(Common.WATCHING_ARTICLES, Collections.emptyList());
+		String sortModeStr = StringUtils.substringAfter(context.requestURI(), "/watch");
+		switch (sortModeStr) {
+			case "":
+				if (null != user) {
+					final List<JSONObject> followingTagArticles = articleQueryService.getFollowingTagArticles(
+							avatarViewMode, user.optString(Keys.OBJECT_ID), 1, pageSize);
+					dataModel.put(Common.WATCHING_ARTICLES, followingTagArticles);
+				}
+
+				break;
+			case "/users":
+				if (null != user) {
+					final List<JSONObject> followingUserArticles = articleQueryService.getFollowingUserArticles(
+							avatarViewMode, user.optString(Keys.OBJECT_ID), 1, pageSize);
+					dataModel.put(Common.WATCHING_ARTICLES, followingUserArticles);
+				}
+
+				break;
+		}
+
+		dataModelService.fillHeaderAndFooter(context, dataModel);
+		dataModelService.fillRandomArticles(dataModel);
+		dataModelService.fillSideHotArticles(dataModel);
+		dataModelService.fillSideTags(dataModel);
+		dataModelService.fillLatestCmts(dataModel);
+
+		dataModel.put(Common.SELECTED, Common.WATCH);
+		dataModel.put(Common.CURRENT, StringUtils.substringAfter(context.requestURI(), "/watch"));
+	}
+
+	/**
+	 * Shows index.
+	 * 说明： 首页会显示 '最近的帖子','最热门的帖子'
+	 *
+	 * @param context the specified context
+	 */
+	@RequestProcessing(value = {"", "/"}, method = HttpMethod.GET)
+	@Before({StopwatchStartAdvice.class})
+	@After({PermissionGrant.class, StopwatchEndAdvice.class})
+	public void showIndex(final RequestContext context) {
+		final HttpServletRequest request = context.getRequest();
+		final HttpServletResponse response = context.getResponse();
+		final JSONObject currentUser = (JSONObject) context.attr(Common.CURRENT_USER);
+		if (null != currentUser) {
+			// 自定义首页跳转 https://github.com/b3log/symphony/issues/774
+			final String indexRedirectURL = currentUser.optString(UserExt.USER_INDEX_REDIRECT_URL);
+			if (StringUtils.isNotBlank(indexRedirectURL)) {
+				context.sendRedirect(indexRedirectURL);
+
+				return;
+			}
+		}
+
+		final AbstractFreeMarkerRenderer renderer = new SkinRenderer(context);
+		context.setRenderer(renderer);
+		renderer.setTemplateName("index.ftl");
+		final Map<String, Object> dataModel = renderer.getDataModel();
+
+		final int avatarViewMode = (int) context.attr(UserExt.USER_AVATAR_VIEW_MODE);
+		// 最近的贴子
+		final List<JSONObject> recentArticles = articleQueryService.getIndexRecentArticles(avatarViewMode);
+		dataModel.put(Common.RECENT_ARTICLES, recentArticles);
+		// 精华贴
+		final List<JSONObject> perfectArticles = articleQueryService.getIndexPerfectArticles();
+		dataModel.put(Common.PERFECT_ARTICLES, perfectArticles);
+		// 填充页面的 header 及 footer
+		dataModelService.fillHeaderAndFooter(context, dataModel);
+		// 填充tags数据
+		dataModelService.fillIndexTags(dataModel);
+
+		dataModel.put(Common.SELECTED, Common.INDEX);
+	}
+
+	/**
+	 * Shows recent articles.
+	 *
+	 * @param context the specified context
+	 */
+	@RequestProcessing(value = {"/recent", "/recent/hot", "/recent/good", "/recent/reply"}, method = HttpMethod.GET)
+	@Before({StopwatchStartAdvice.class, AnonymousViewCheck.class})
+	@After({PermissionGrant.class, StopwatchEndAdvice.class})
+	public void showRecent(final RequestContext context) {
+		final HttpServletRequest request = context.getRequest();
+		final HttpServletResponse response = context.getResponse();
+
+		final AbstractFreeMarkerRenderer renderer = new SkinRenderer(context);
+		context.setRenderer(renderer);
+		renderer.setTemplateName("recent.ftl");
+		final Map<String, Object> dataModel = renderer.getDataModel();
+		final int pageNum = Paginator.getPage(request);
+		int pageSize = Symphonys.getInt("indexArticlesCnt");
+		final JSONObject user = (JSONObject) context.attr(Common.CURRENT_USER);
+		if (null != user) {
+			pageSize = user.optInt(UserExt.USER_LIST_PAGE_SIZE);
+
+			if (!UserExt.finshedGuide(user)) {
+				context.sendRedirect(Latkes.getServePath() + "/guide");
+
+				return;
+			}
+		}
+
+		final int avatarViewMode = (int) context.attr(UserExt.USER_AVATAR_VIEW_MODE);
+
+		String sortModeStr = StringUtils.substringAfter(context.requestURI(), "/recent");
+		int sortMode;
+		switch (sortModeStr) {
+			case "":
+				sortMode = 0;
+
+				break;
+			case "/hot":
+				sortMode = 1;
+
+				break;
+			case "/good":
+				sortMode = 2;
+
+				break;
+			case "/reply":
+				sortMode = 3;
+
+				break;
+			default:
+				sortMode = 0;
+		}
+
+		dataModel.put(Common.SELECTED, Common.RECENT);
+		final JSONObject result = articleQueryService.getRecentArticles(avatarViewMode, sortMode, pageNum, pageSize);
+		final List<JSONObject> allArticles = (List<JSONObject>) result.get(Article.ARTICLES);
+		final List<JSONObject> stickArticles = new ArrayList<>();
+		final Iterator<JSONObject> iterator = allArticles.iterator();
+		while (iterator.hasNext()) {
+			final JSONObject article = iterator.next();
+			final boolean stick = article.optInt(Article.ARTICLE_T_STICK_REMAINS) > 0;
+			article.put(Article.ARTICLE_T_IS_STICK, stick);
+			if (stick) {
+				stickArticles.add(article);
+				iterator.remove();
+			}
+		}
+
+		dataModel.put(Common.STICK_ARTICLES, stickArticles);
+		dataModel.put(Common.LATEST_ARTICLES, allArticles);
+
+		final JSONObject pagination = result.getJSONObject(Pagination.PAGINATION);
+		final int pageCount = pagination.optInt(Pagination.PAGINATION_PAGE_COUNT);
+		final List<Integer> pageNums = (List<Integer>) pagination.get(Pagination.PAGINATION_PAGE_NUMS);
+		if (!pageNums.isEmpty()) {
+			dataModel.put(Pagination.PAGINATION_FIRST_PAGE_NUM, pageNums.get(0));
+			dataModel.put(Pagination.PAGINATION_LAST_PAGE_NUM, pageNums.get(pageNums.size() - 1));
+		}
+
+		dataModel.put(Pagination.PAGINATION_CURRENT_PAGE_NUM, pageNum);
+		dataModel.put(Pagination.PAGINATION_PAGE_COUNT, pageCount);
+		dataModel.put(Pagination.PAGINATION_PAGE_NUMS, pageNums);
+
+		dataModelService.fillHeaderAndFooter(context, dataModel);
+		dataModelService.fillRandomArticles(dataModel);
+		dataModelService.fillSideHotArticles(dataModel);
+		dataModelService.fillSideTags(dataModel);
+		dataModelService.fillLatestCmts(dataModel);
+
+		dataModel.put(Common.CURRENT, StringUtils.substringAfter(context.requestURI(), "/recent"));
+	}
+
+	/**
+	 * Shows hot articles.
+	 *
+	 * @param context the specified context
+	 */
+	@RequestProcessing(value = "/hot", method = HttpMethod.GET)
+	@Before({StopwatchStartAdvice.class, AnonymousViewCheck.class})
+	@After({PermissionGrant.class, StopwatchEndAdvice.class})
+	public void showHotArticles(final RequestContext context) {
+		final HttpServletRequest request = context.getRequest();
+		final HttpServletResponse response = context.getResponse();
+
+		final AbstractFreeMarkerRenderer renderer = new SkinRenderer(context);
+		context.setRenderer(renderer);
+		renderer.setTemplateName("hot.ftl");
+		final Map<String, Object> dataModel = renderer.getDataModel();
+
+		int pageSize = Symphonys.getInt("indexArticlesCnt");
+		final JSONObject user = (JSONObject) context.attr(Common.CURRENT_USER);
+		if (null != user) {
+			pageSize = user.optInt(UserExt.USER_LIST_PAGE_SIZE);
+		}
+
+		final int avatarViewMode = (int) context.attr(UserExt.USER_AVATAR_VIEW_MODE);
+		final List<JSONObject> indexArticles = articleQueryService.getHotArticles(avatarViewMode, pageSize);
+		dataModel.put(Common.INDEX_ARTICLES, indexArticles);
+		dataModel.put(Common.SELECTED, Common.HOT);
+
+		Stopwatchs.start("Fills");
+		try {
+			dataModelService.fillHeaderAndFooter(context, dataModel);
+			if (!(Boolean) dataModel.get(Common.IS_MOBILE)) {
+				dataModelService.fillRandomArticles(dataModel);
+			}
+			dataModelService.fillSideHotArticles(dataModel);
+			dataModelService.fillSideTags(dataModel);
+			dataModelService.fillLatestCmts(dataModel);
+		} finally {
+			Stopwatchs.end();
+		}
+	}
+
+	/**
+	 * Shows perfect articles.
+	 *
+	 * @param context the specified context
+	 */
+	@RequestProcessing(value = "/perfect", method = HttpMethod.GET)
+	@Before({StopwatchStartAdvice.class, AnonymousViewCheck.class})
+	@After({PermissionGrant.class, StopwatchEndAdvice.class})
+	public void showPerfectArticles(final RequestContext context) {
+		final HttpServletRequest request = context.getRequest();
+		final HttpServletResponse response = context.getResponse();
+
+		final AbstractFreeMarkerRenderer renderer = new SkinRenderer(context);
+		context.setRenderer(renderer);
+		renderer.setTemplateName("perfect.ftl");
+		final Map<String, Object> dataModel = renderer.getDataModel();
+		final int pageNum = Paginator.getPage(request);
+		int pageSize = Symphonys.getInt("indexArticlesCnt");
+		final JSONObject user = (JSONObject) context.attr(Common.CURRENT_USER);
+		if (null != user) {
+			pageSize = user.optInt(UserExt.USER_LIST_PAGE_SIZE);
+			if (!UserExt.finshedGuide(user)) {
+				context.sendRedirect(Latkes.getServePath() + "/guide");
+
+				return;
+			}
+		}
+
+		final int avatarViewMode = (int) context.attr(UserExt.USER_AVATAR_VIEW_MODE);
+		final JSONObject result = articleQueryService.getPerfectArticles(avatarViewMode, pageNum, pageSize);
+		final List<JSONObject> perfectArticles = (List<JSONObject>) result.get(Article.ARTICLES);
+		dataModel.put(Common.PERFECT_ARTICLES, perfectArticles);
+		dataModel.put(Common.SELECTED, Common.PERFECT);
+		final JSONObject pagination = result.getJSONObject(Pagination.PAGINATION);
+		final int pageCount = pagination.optInt(Pagination.PAGINATION_PAGE_COUNT);
+		final List<Integer> pageNums = (List<Integer>) pagination.get(Pagination.PAGINATION_PAGE_NUMS);
+		if (!pageNums.isEmpty()) {
+			dataModel.put(Pagination.PAGINATION_FIRST_PAGE_NUM, pageNums.get(0));
+			dataModel.put(Pagination.PAGINATION_LAST_PAGE_NUM, pageNums.get(pageNums.size() - 1));
+		}
+
+		dataModel.put(Pagination.PAGINATION_CURRENT_PAGE_NUM, pageNum);
+		dataModel.put(Pagination.PAGINATION_PAGE_COUNT, pageCount);
+		dataModel.put(Pagination.PAGINATION_PAGE_NUMS, pageNums);
+
+		dataModelService.fillHeaderAndFooter(context, dataModel);
+		dataModelService.fillRandomArticles(dataModel);
+		dataModelService.fillSideHotArticles(dataModel);
+		dataModelService.fillSideTags(dataModel);
+		dataModelService.fillLatestCmts(dataModel);
+	}
+
+	/**
+	 * Shows about.
+	 *
+	 * @param context the specified context
+	 * @throws Exception exception
+	 */
+	@RequestProcessing(value = "/about", method = HttpMethod.GET)
+	@Before(StopwatchStartAdvice.class)
+	@After(StopwatchEndAdvice.class)
+	public void showAbout(final RequestContext context) {
+		context.sendRedirect("https://hacpai.com/article/1440573175609");
+	}
+
+	/**
+	 * Shows b3log.
+	 *
+	 * @param context the specified context
+	 */
+	@RequestProcessing(value = "/b3log", method = HttpMethod.GET)
+	@Before(StopwatchStartAdvice.class)
+	@After({PermissionGrant.class, StopwatchEndAdvice.class})
+	public void showB3log(final RequestContext context) {
+		final HttpServletRequest request = context.getRequest();
+		final HttpServletResponse response = context.getResponse();
+
+		final AbstractFreeMarkerRenderer renderer = new SkinRenderer(context);
+		context.setRenderer(renderer);
+		renderer.setTemplateName("other/b3log.ftl");
+		final Map<String, Object> dataModel = renderer.getDataModel();
+
+		dataModelService.fillHeaderAndFooter(context, dataModel);
+		dataModelService.fillRandomArticles(dataModel);
+		dataModelService.fillSideHotArticles(dataModel);
+		dataModelService.fillSideTags(dataModel);
+		dataModelService.fillLatestCmts(dataModel);
+	}
+
+	/**
+	 * Shows kill browser page with the specified context.
+	 *
+	 * @param context the specified context
+	 */
+	@RequestProcessing(value = "/kill-browser", method = HttpMethod.GET)
+	@Before(StopwatchStartAdvice.class)
+	@After(StopwatchEndAdvice.class)
+	public void showKillBrowser(final RequestContext context) {
+		final HttpServletRequest request = context.getRequest();
+
+		final AbstractFreeMarkerRenderer renderer = new SkinRenderer(context);
+		renderer.setTemplateName("other/kill-browser.ftl");
+		context.setRenderer(renderer);
+
+		final Map<String, Object> dataModel = renderer.getDataModel();
+		final Map<String, String> langs = langPropsService.getAll(Locales.getLocale());
+
+		dataModel.putAll(langs);
+		Keys.fillRuntime(dataModel);
+		dataModelService.fillMinified(dataModel);
+	}
 }
