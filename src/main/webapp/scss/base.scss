@@ -818,6 +818,8 @@ a[class*=" icon-"]:hover {
           position: relative;
           list-style: none;
 
+          padding: 0 $menu-item-padding;
+
           &:after {
             content: '';
             display: block;
@@ -835,11 +837,17 @@ a[class*=" icon-"]:hover {
           }
 
           & > li {
-            padding: 0 $menu-item-padding;
+            padding: 0 $menu-item-padding/2;
+
             white-space: nowrap;
+
+            text-align: left;
+
+            &:nth-child(1) {
+              padding: 0;
+            }
           }
         }
-
       }
 
       //鼠标放上去的时候显示子菜单
