@@ -25,12 +25,13 @@
     <@head title="${symphonyLabel}">
         <meta name="description" content="${symDescriptionLabel}"/>
     </@head>
-    <link rel="stylesheet" href="${staticServePath}/css/index.css?${staticResourceVersion}"/>
+    <link rel="stylesheet" href="${staticServePath}/assets/themes/huayun/css/index.css?${staticResourceVersion}"/>
     <link rel="canonical" href="${servePath}">
 </head>
 <body class="index">
 <#--头部Banner 没有什么鸟用，去掉-->
 <#--${HeaderBannerLabel}-->
+<#--头部功能条,包括logo,已登录用户信息菜单等-->
 <#include "header.ftl">
 <#--首页主要显示区域-->
 <div class="main">
@@ -227,7 +228,6 @@
             </div>
         </div>
     </div>
-</div>
 </div>
 <#include "footer.ftl">
 <script src="${staticServePath}/js/channel${miniPostfix}.js?${staticResourceVersion}"></script>

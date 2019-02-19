@@ -381,6 +381,7 @@ a[class*=" icon-"]:hover {
 .icon-telegram:hover {
   color: #2da5e1;
 }
+
 /* end icon */
 
 /* start tip */
@@ -754,42 +755,91 @@ a[class*=" icon-"]:hover {
 /* end framework */
 
 /* start header */
+// 头部的导航栏
 .nav {
-  height: 48px;
+  height: $navbar-height;
+  line-height: $navbar-height;
   width: 100%;
-  background-color: $theme-primary;
+  background-color: $navbar-bgcolor;
   z-index: 83;
   position: relative;
   box-sizing: border-box;
   display: flex;
-  padding: 0 10px;
 
-  h1 {
-    margin-right: 20px;
+  // logo图片
+  .nav__logo {
+    & > img {
+      max-height: 100%;
+      background-size: contain;
+    }
   }
 
-  h1 svg {
-    color: #fff;
-    height: 48px;
-    width: 48px;
-  }
-
+  // 导航菜单栏
   .nav-tabs {
     flex: 1;
     text-align: center;
-    overflow: hidden;
-    line-height: 20px;
-  }
+    //overflow: hidden;
+    color: $menu-item-color;
 
-  .nav-tabs svg {
-    margin: 3px 2px 0 0;
-    visibility: hidden;
-    float: left;
-  }
+    .nav-item {
+      display: inline-block;
+      padding: 0 $menu-item-padding;
+      position: relative;
+      cursor: pointer;
 
-  .nav-tabs a:hover svg,
-  .nav-tabs a.current svg {
-    visibility: visible;
+      a {
+        color: $menu-item-color;
+      }
+
+      //菜单标题
+      .nav-item__title {
+        color: $menu-item-color;
+      }
+
+      //子菜单
+      .nav-item__chileren {
+        position: absolute;
+        list-style: none;
+
+        // 第一级子菜单
+        &.all_domains__wrapper {
+          //TODO: 宽度与高度，还有位置要做成自适应的
+          width: 800px;
+          height: 500px;
+          left: -300px;
+          display: none;
+        }
+
+        // 第二级菜单
+        &.tags_wrapper {
+          list-style: none;
+        }
+
+      }
+
+      //鼠标放上去的时候显示子菜单
+      &:hover {
+        background-color: $menu-active-bgcolor;
+
+        .all_domains__wrapper {
+          display: block;
+          background-color: inherit;
+        }
+      }
+    }
+
+    svg {
+      margin: 3px 2px 0 0;
+      visibility: hidden;
+      float: left;
+    }
+
+    //鼠标放上去，或者页面是当前菜单项时显示菜单项的图标
+    a:hover, a.current {
+      svg {
+        visibility: visible;
+      }
+    }
   }
 
   .nav-tabs > a,
@@ -799,7 +849,7 @@ a[class*=" icon-"]:hover {
     color: #fff;
     text-decoration: none;
     text-align: center;
-    padding: 14px 10px;
+    padding: 0 10px;
   }
 
   a.current {

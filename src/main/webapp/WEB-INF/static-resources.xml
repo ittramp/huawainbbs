@@ -25,85 +25,87 @@
     Author: Liyuan Li
 -->
 <static-files>
-    
-    <include path="/favicon.ico" />
-    <include path="/favicon.png" />
-    <include path="/robots.txt" />
-        
-    <include path="/js/**.js" />
-    <include path="/js/**/*.js" />
-    <include path="/js/**.css" />
-    <include path="/js/**/*.css" />
-    <include path="/js/**.htm" />
-    <include path="/js/**/*.htm" />
-    <include path="/js/**.html" />
-    <include path="/js/**/*.html" />
-    <include path="/js/**.gif" />
-    <include path="/js/**/*.gif" />
-    <include path="/js/**.png" />
-    <include path="/js/**/*.png" />
-    <include path="/js/**.jpg" />
-    <include path="/js/**/*.jpg" />
-    <include path="/js/**.swf" />
-    <include path="/js/**/*.swf" />
-    <include path="/js/**/*.eot" />
-    <include path="/js/**/*.svg" />
-    <include path="/js/**/*.ttf" />
-    <include path="/js/**/*.woff" />
-        
-    <include path="/skins/**.css" />
-    <include path="/skins/**/*.css" />
-    <include path="/skins/**.js" />
-    <include path="/skins/**/*.js" />
-    <include path="/skins/**.png" />
-    <include path="/skins/**/*.png" />
-    <include path="/skins/**.jpg" />
-    <include path="/skins/**/*.jpg" />
-    <include path="/skins/**.swf" />
-    <include path="/skins/**/*.swf" />
-    <include path="/skins/**.gif" />
-    <include path="/skins/**/*.gif" />
-    <include path="/skins/**/*.eot" />
-    <include path="/skins/**/*.svg" />
-    <include path="/skins/**/*.ttf" />
-    <include path="/skins/**/*.woff" />
-        
-    <include path="/css/**.css" />
-    <include path="/css/**/*.css" />
-        
-    <include path="/css/fonts/*.eot" />
-    <include path="/css/fonts/*.svg" />
-    <include path="/css/*.svg" />
-    <include path="/css/fonts/*.ttf" />
-    <include path="/css/fonts/*.woff" />
-        
-    <include path="/images/**.png" />
-    <include path="/images/**/*.png" />
-    <include path="/images/**.jpg" />
-    <include path="/images/**/*.jpg" />
-    <include path="/images/**.gif" />
-    <include path="/images/**/*.gif" />
-    <include path="/images/**/*.svg" />
-        
-    <include path="/plugins/**.css" />
-    <include path="/plugins/**/*.css" />
-    <include path="/plugins/**.js" />
-    <include path="/plugins/**/*.js" />
-    <include path="/plugins/**.png" />
-    <include path="/plugins/**/*.png" />
-    <include path="/plugins/**.jpg" />
-    <include path="/plugins/**/*.jpg" />
-    <include path="/plugins/**.swf" />
-    <include path="/plugins/**/*.swf" />
-    <include path="/plugins/**.gif" />
-    <include path="/plugins/**/*.gif" />
-    <include path="/plugins/**.html" />
-    <include path="/plugins/**/*.html" />
-    <include path="/plugins/**.htm" />
-    <include path="/plugins/**/*.htm" />
 
-    <include path="/emoji/**/*.*" />
-    <include path="/halt.html" />
-    <include path="/opensearch.xml" />
-    <include path="/CHANGE_LOGS.html" />
+	<include path="/favicon.ico" />
+	<include path="/favicon.png" />
+	<include path="/robots.txt" />
+
+	<include path="/js/**.js" />
+	<include path="/js/**/*.js" />
+	<include path="/js/**.css" />
+	<include path="/js/**/*.css" />
+	<include path="/js/**.htm" />
+	<include path="/js/**/*.htm" />
+	<include path="/js/**.html" />
+	<include path="/js/**/*.html" />
+	<include path="/js/**.gif" />
+	<include path="/js/**/*.gif" />
+	<include path="/js/**.png" />
+	<include path="/js/**/*.png" />
+	<include path="/js/**.jpg" />
+	<include path="/js/**/*.jpg" />
+	<include path="/js/**.swf" />
+	<include path="/js/**/*.swf" />
+	<include path="/js/**/*.eot" />
+	<include path="/js/**/*.svg" />
+	<include path="/js/**/*.ttf" />
+	<include path="/js/**/*.woff" />
+
+	<include path="/skins/**.css" />
+	<include path="/skins/**/*.css" />
+	<include path="/skins/**.js" />
+	<include path="/skins/**/*.js" />
+	<include path="/skins/**.png" />
+	<include path="/skins/**/*.png" />
+	<include path="/skins/**.jpg" />
+	<include path="/skins/**/*.jpg" />
+	<include path="/skins/**.swf" />
+	<include path="/skins/**/*.swf" />
+	<include path="/skins/**.gif" />
+	<include path="/skins/**/*.gif" />
+	<include path="/skins/**/*.eot" />
+	<include path="/skins/**/*.svg" />
+	<include path="/skins/**/*.ttf" />
+	<include path="/skins/**/*.woff" />
+
+	<include path="/css/**.css" />
+	<include path="/css/**/*.css" />
+
+	<include path="/css/fonts/*.eot" />
+	<include path="/css/fonts/*.svg" />
+	<include path="/css/*.svg" />
+	<include path="/css/fonts/*.ttf" />
+	<include path="/css/fonts/*.woff" />
+
+	<include path="/images/**.png" />
+	<include path="/images/**/*.png" />
+	<include path="/images/**.jpg" />
+	<include path="/images/**/*.jpg" />
+	<include path="/images/**.gif" />
+	<include path="/images/**/*.gif" />
+	<include path="/images/**/*.svg" />
+
+	<include path="/plugins/**.css" />
+	<include path="/plugins/**/*.css" />
+	<include path="/plugins/**.js" />
+	<include path="/plugins/**/*.js" />
+	<include path="/plugins/**.png" />
+	<include path="/plugins/**/*.png" />
+	<include path="/plugins/**.jpg" />
+	<include path="/plugins/**/*.jpg" />
+	<include path="/plugins/**.swf" />
+	<include path="/plugins/**/*.swf" />
+	<include path="/plugins/**.gif" />
+	<include path="/plugins/**/*.gif" />
+	<include path="/plugins/**.html" />
+	<include path="/plugins/**/*.html" />
+	<include path="/plugins/**.htm" />
+	<include path="/plugins/**/*.htm" />
+
+	<include path="/emoji/**/*.*" />
+	<include path="/halt.html" />
+	<include path="/opensearch.xml" />
+	<include path="/CHANGE_LOGS.html" />
+	<!--assets目录下的所有项都作为静态资源-->
+	<include path="/assets/**/*.*" />
 </static-files>

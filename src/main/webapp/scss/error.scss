@@ -16,41 +16,42 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 /**
- * 错误样式.
+ * 错误页面样式.
  *
  * @author <a href="http://vanessa.b3log.org">Liyuan Li</a>
  * @version 1.0.4.2, Mar 28, 2017
  */
-
 @import "variables";
 /* start error */
 .error .block {
-    display: block;
+  display: block;
 }
 
 .article-module {
-    padding: 30px 15px;
+  padding: 30px 15px;
 }
+
 /* end error */
 
 /* start 403 */
 .error-403 {
-    .wrapper > .module.article-module {
-        margin-bottom: 20px;
-    }
+  .wrapper > .module.article-module {
+    margin-bottom: 20px;
+  }
 
-    .need-login {
-        padding: 15px;
-        color: #767676;
-        text-align: center;
-    }
+  .need-login {
+    padding: 15px;
+    color: #767676;
+    text-align: center;
+  }
 
-    .need-login a {
-        color: #767676;
-    }
+  .need-login a {
+    color: #767676;
+  }
 
-    .list > ul {
-        padding-top: 0;
-    }
+  .list > ul {
+    padding-top: 0;
+  }
 }
+
 /* end 403 */
