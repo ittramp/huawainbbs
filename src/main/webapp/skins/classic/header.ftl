@@ -38,25 +38,26 @@
                     全部版块
                 </span>
                 <#--子菜单-->
-                <ul class="nav-item__chileren all_domains__wrapper">
+                <div class="all_domains__wrapper">
                     <#list domains as domain>
-                        <li class="nav-item">
-                            <a class="nav-item__title"
-                               pjax-title="${domain.domainTitle} - ${domainLabel} - ${symphonyLabel}"
-                               href="${servePath}/domain/${domain.domainURI}"<#if selected?? && selected == domain.domainURI>
-                                class="current"</#if>>${domain.domainIconPath} ${domain.domainTitle}</a>
-                            <ul class="nav-item__chileren tags_wrapper">
-                                <#list domain.domainTags as tag>
-                                    <li>
-                                        <a href="${servePath}/domain/${domain.domainTitle}/tag/${tag.tagTitle}">
-                                            ${tag.tagTitle}
-                                        </a>
-                                    </li>
-                                </#list>
-                            </ul>
-                        </li>
+                    <#--单个domain及下属的-->
+                        <ul class="domain_item">
+                            <li class="domain_item__title">
+                                <a pjax-title="${domain.domainTitle} - ${domainLabel} - ${symphonyLabel}"
+                                   href="${servePath}/domain/${domain.domainURI}">${domain.domainIconPath} ${domain.domainTitle}</a>
+                            </li>
+
+                            <#list domain.domainTags as tag>
+                                <li>
+                                    <a href="${servePath}/domain/${domain.domainTitle}/tag/${tag.tagTitle}">
+                                        ${tag.tagTitle}
+                                    </a>
+                                </li>
+                            </#list>
+
+                        </ul>
                     </#list>
-                </ul>
+                </div>
             </li>
             <#--<#list domains as domain>-->
             <#--<a pjax-title="${domain.domainTitle} - ${domainLabel} - ${symphonyLabel}"-->

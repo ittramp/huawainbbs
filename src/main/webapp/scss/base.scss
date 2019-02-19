@@ -787,32 +787,57 @@ a[class*=" icon-"]:hover {
       position: relative;
       cursor: pointer;
 
+      height: 100%;
+
       a {
         color: $menu-item-color;
+        text-decoration: none;
       }
 
       //菜单标题
       .nav-item__title {
         color: $menu-item-color;
+        font-size: 0.18rem;
       }
 
       //子菜单
-      .nav-item__chileren {
+      .all_domains__wrapper {
         position: absolute;
         list-style: none;
+        transform: translateX(-50%);
+        left: 50%;
+        top: $navbar-height;
+        display: none;
 
-        // 第一级子菜单
-        &.all_domains__wrapper {
-          //TODO: 宽度与高度，还有位置要做成自适应的
-          width: 800px;
-          height: 500px;
-          left: -300px;
-          display: none;
+        & > li {
+          white-space: nowrap;
         }
 
-        // 第二级菜单
-        &.tags_wrapper {
+        //单个域的菜单项
+        .domain_item {
+          position: relative;
           list-style: none;
+
+          &:after {
+            content: '';
+            display: block;
+            position: absolute;
+            top: 10px;
+            bottom: 10px;
+            left: 100%;
+            width: 1px;
+            background-color: rgba(255, 255, 255, 0.2);
+          }
+
+          // 版块的名称
+          .domain_item__title {
+
+          }
+
+          & > li {
+            padding: 0 $menu-item-padding;
+            white-space: nowrap;
+          }
         }
 
       }
@@ -822,7 +847,7 @@ a[class*=" icon-"]:hover {
         background-color: $menu-active-bgcolor;
 
         .all_domains__wrapper {
-          display: block;
+          display: flex;
           background-color: inherit;
         }
       }
