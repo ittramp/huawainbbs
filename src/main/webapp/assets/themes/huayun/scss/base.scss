@@ -774,6 +774,7 @@ a[class*=" icon-"]:hover {
     & > img {
       max-height: 100%;
       background-size: contain;
+      transform: translateY(-4px);
     }
   }
 
@@ -923,6 +924,7 @@ a[class*=" icon-"]:hover {
       padding: 0 10px;
       vertical-align: middle;
       float: left;
+      margin-left: 0.2rem;
 
       //用户信息
       &.user_msg {

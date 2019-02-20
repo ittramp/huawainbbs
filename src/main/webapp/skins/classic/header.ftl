@@ -124,7 +124,7 @@
                 <a href="javascript:void(0)" id="aPersonListPanel" class="nav_item tooltipped tooltipped-w"
                    aria-label="${viewHomeAndProfileLabel}"
                    data-url="${servePath}/member/${currentUser.userName}">
-                    <span class="avatar-small" style="background-image:url('${currentUser.userAvatarURL20}')"></span>
+                    <span class="avatar-small" style="background-image:url('${currentUser.userAvatarURL48}')"></span>
                 </a>
                 <div class="module person-list" id="personListPanel">
                     <ul>
