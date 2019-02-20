@@ -35,13 +35,13 @@ var del = require('del')
 
 function sassProcess() {
     return gulp
-        .src('./src/main/webapp/scss/*.scss')
+        .src('./src/main/webapp/assets/themes/huayun/scss/*.scss')
         .pipe(sass({outputStyle: 'compressed'}).on('error', sass.logError))
         .pipe(gulp.dest('./src/main/webapp/assets/themes/huayun/css'))
 }
 
 function sassProcessWatch() {
-    gulp.watch('./src/main/webapp/scss/*.scss', sassProcess)
+    gulp.watch('./src/main/webapp/assets/themes/huayun/scss/*.scss', sassProcess)
 }
 
 gulp.task('watch', gulp.series(sassProcessWatch))

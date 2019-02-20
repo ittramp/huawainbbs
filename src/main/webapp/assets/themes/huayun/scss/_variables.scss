@@ -55,11 +55,12 @@ $black-light: #616161 !default;
 
 $color-purple: #81308d;
 $color-purple-light: #a14bac;
-// Fonts
+$color-white: white;
 
+// Fonts
 @font-face {
   font-face-name: "Adobe-Std-R";
-  src: url("../assets/themes/huayun/fonts/AdobeHeitiStd-Regular.otf");
+  src: url("../fonts/AdobeHeitiStd-Regular.otf");
   font-weight: normal;
   font-style: normal;
 }
@@ -82,10 +83,14 @@ $theme-success: $blue-light;
 // -------------- 主题布局 -----------------
 $body-bgcolor: #f6f6f6;
 // ----- 导航栏 -------
-$navbar-height: 0.54rem;
+$navBar-height: 0.54rem;
 //导航栏的背景色
-$navbar-bgcolor: $color-purple;
+$navBar-bgcolor: $color-purple;
 // 导航栏菜单弹出的背景颜色
 $menu-active-bgcolor: $color-purple-light;
 $menu-item-color: white;
 $menu-item-padding: 0.2rem;
+$submenu-item-padding: 0.5rem;
+// 搜索栏
+$searchBar-height: 30px;
+$searchBar-width: 209px;

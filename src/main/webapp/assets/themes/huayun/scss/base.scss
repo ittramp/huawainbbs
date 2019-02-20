@@ -427,6 +427,7 @@ a[class*=" icon-"]:hover {
   display: inline-block;
   vertical-align: middle;
   background-color: rgba(0, 0, 0, .02);
+  transform: translateY(-2px);
 }
 
 .avatar {
@@ -757,14 +758,16 @@ a[class*=" icon-"]:hover {
 /* start header */
 // 头部的导航栏
 .nav {
-  height: $navbar-height;
-  line-height: $navbar-height;
+  height: $navBar-height;
+  line-height: $navBar-height;
   width: 100%;
-  background-color: $navbar-bgcolor;
+  background-color: $navBar-bgcolor;
   z-index: 83;
   position: relative;
   box-sizing: border-box;
   display: flex;
+
+  font-size: 0.18rem;
 
   // logo图片
   .nav__logo {
@@ -776,9 +779,9 @@ a[class*=" icon-"]:hover {
 
   // 导航菜单栏
   .nav-tabs {
-    flex: 1;
+    //flex: 1;
+    flex-basis: 3.6rem;
     text-align: center;
-    //overflow: hidden;
     color: $menu-item-color;
 
     .nav-item {
@@ -806,8 +809,11 @@ a[class*=" icon-"]:hover {
         list-style: none;
         transform: translateX(-50%);
         left: 50%;
-        top: $navbar-height;
+        top: $navBar-height;
         display: none;
+        line-height: initial;
+        cursor: initial;
+        padding: 40px 0;
 
         & > li {
           white-space: nowrap;
@@ -817,34 +823,42 @@ a[class*=" icon-"]:hover {
         .domain_item {
           position: relative;
           list-style: none;
-
-          padding: 0 $menu-item-padding;
+          padding: 0 $submenu-item-padding;
 
           &:after {
             content: '';
             display: block;
             position: absolute;
-            top: 10px;
-            bottom: 10px;
+            top: 0;
+            bottom: 0;
             left: 100%;
             width: 1px;
             background-color: rgba(255, 255, 255, 0.2);
           }
 
-          // 版块的名称
-          .domain_item__title {
-
-          }
-
+          // 各个domain下的tags列表
           & > li {
             padding: 0 $menu-item-padding/2;
-
             white-space: nowrap;
-
             text-align: left;
 
-            &:nth-child(1) {
+            font-size: 0.14rem;
+            line-height: 0.15rem;
+            margin-top: 13px;
+
+            // 版块的名称
+            &.domain_item__title {
+              font-size: 0.18rem;
+              font-weight: normal;
+              -webkit-font-smoothing: subpixel-antialiased;
               padding: 0;
+              margin-top: 0;
+
+              margin-bottom: 0.2rem;
+
+              & > * {
+                vertical-align: top;
+              }
             }
           }
         }
@@ -875,80 +889,73 @@ a[class*=" icon-"]:hover {
     }
   }
 
-  .nav-tabs > a,
-  .user-nav > a,
-  .user-nav > span {
-    display: inline-block;
-    color: #fff;
-    text-decoration: none;
-    text-align: center;
-    padding: 0 10px;
-  }
-
-  a.current {
-    border-bottom: 2px solid $theme-accent;
-    padding-bottom: 12px;
-  }
-
-  .user-nav svg {
-    height: 20px;
-    width: 18px;
-    float: left;
-  }
-
-  .user-nav > a,
-  .user-nav > span {
-    float: left;
-  }
-
+  // 搜索框
   input::-webkit-input-placeholder {
     color: #ddd;
   }
 
+  input::placeholder {
+    color: #ddd;
+  }
+
   input.search {
-    background-color: rgba(255, 255, 255, .15);
-    border: 0px;
-    border-radius: 3px 3px 3px 3px;
+    display: inline-block;
+    border: 0;
     padding: 5px 8px;
-    width: 180px;
-    margin: 10px 10px 0 20px;
-    line-height: 28px;
-    height: 28px;
+    width: $searchBar-width;
+    vertical-align: middle;
+    line-height: $searchBar-height;
+    height: $searchBar-height;
     color: #eee;
     box-sizing: border-box;
     position: relative;
-    vertical-align: top;
+    background: $color-white url(../images/layout/icon-zoom.png) no-repeat 96% 5px;
   }
 
-  input.search:hover {
-    background: rgba(255, 255, 255, 0.25);
-  }
+  // 用户工具导航栏
+  .user-nav {
+    // 单个项目
+    .nav_item {
+      display: inline-block;
+      color: #fff;
+      text-decoration: none;
+      text-align: center;
+      padding: 0 10px;
+      vertical-align: middle;
+      float: left;
 
-  input.search:focus {
-    background: #fff;
-    color: #222;
-  }
+      //用户信息
+      &.user_msg {
+        .icon {
+          background: url(../images/layout/icon-message.png) no-repeat center center;
+          height: 20px;
+          width: 20px;
+          display: inline-block;
+          vertical-align: middle;
+          position: relative;
+          transform: translateY(-2px);
+        }
 
-  .user-nav .no-msg,
-  .user-nav .msg {
-    background-color: $theme-secondary;
-    border-radius: 3px;
-    color: #FFFFFF;
-    padding: 0px 6px;
-    margin: 14px 10px;
-    line-height: 20px;
-  }
-
-  .user-nav .msg {
-    background-color: $theme-accent;
-    color: #FFFFFF;
-  }
-
-  .user-nav a.current.no-msg,
-  .user-nav a.current.msg {
-    animation: none;
-    background-color: $theme-accent;
-    border-bottom: 0;
+      //  有消息时的样式
+        &.msg {
+          .icon {
+            &::after {
+              display: block;
+              content: attr(data-msg-count);
+              position: absolute;
+              top: 0;
+              right: 0;
+              font-size: 0.8em;
+              color: #FFFFFF;
+              height: 0.8em;
+              width: 0.8em;
+              background: red;
+              border-radius: 50%;
+            }
+          }
+        }
+      }
+    }
   }
 
   .person-list {

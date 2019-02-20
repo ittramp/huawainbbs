@@ -54,7 +54,6 @@
                                     </a>
                                 </li>
                             </#list>
-
                         </ul>
                     </#list>
                 </div>
@@ -88,7 +87,7 @@
         <#--是否启用搜索栏 -->
         <#if esEnabled || algoliaEnabled>
             <form class="responsive-hide fn-left" target="_blank" action="/search">
-                <input class="search" placeholder="Search HacPai" type="text" name="key" id="search"
+                <input class="search" placeholder="搜索" type="text" name="key" id="search"
                        value="<#if key??>${key}</#if>">
                 <input type="submit" class="fn-none" value=""/>
             </form>
@@ -98,23 +97,23 @@
             <#--根据用户是否登录来显示对应的菜单项-->
             <#if isLoggedIn>
             <#--发贴-->
-                <a href="${servePath}/pre-post" class="tooltipped tooltipped-w" aria-label="${postArticleLabel}">
-                    <svg>
-                        <use xlink:href="#addfile"></use>
-                    </svg>
+                <a href="${servePath}/pre-post" class="nav_item tooltipped tooltipped-w"
+                   aria-label="${postArticleLabel}">
+                    ${postArticleLabel}
                 </a>
             <#--如果有权限'menuAdmin'则显示'管理菜单'-->
                 <#if permissions["menuAdmin"].permissionGrant>
-                    <a href="${servePath}/admin" aria-label="${adminLabel}" class="tooltipped tooltipped-w">
-                        <svg>
-                            <use xlink:href="#userrole"></use>
-                        </svg>
+                    <a href="${servePath}/admin" aria-label="${adminLabel}" class="nav_item tooltipped tooltipped-w">
+                        ${adminLabel}
                     </a>
                 </#if>
             <#--内部消息-->
                 <a id="aNotifications"
-                   class="tooltipped tooltipped-w <#if unreadNotificationCount == 0>no-msg<#else>msg</#if>"
-                   href="${servePath}/notifications" aria-label="${messageLabel}">${unreadNotificationCount}</a>
+                   class="tooltipped tooltipped-w nav_item user_msg <#if unreadNotificationCount == 0>no-msg<#else>msg</#if>"
+                   href="${servePath}/notifications" aria-label="${messageLabel}" data-msg-count="${unreadNotificationCount}" >
+                    <span class="icon">
+                    </span>
+                </a>
             <#--所有的活动(或者说是:'应用')-->
             <#--<a href="${servePath}/activities" aria-label="${activityLabel}" class="tooltipped tooltipped-w">-->
             <#--<svg>-->
@@ -122,7 +121,7 @@
             <#--</svg>-->
             <#--</a>-->
             <#--用户个人信息等菜单-->
-                <a href="javascript:void(0)" id="aPersonListPanel" class="tooltipped tooltipped-w"
+                <a href="javascript:void(0)" id="aPersonListPanel" class="nav_item tooltipped tooltipped-w"
                    aria-label="${viewHomeAndProfileLabel}"
                    data-url="${servePath}/member/${currentUser.userName}">
                     <span class="avatar-small" style="background-image:url('${currentUser.userAvatarURL20}')"></span>

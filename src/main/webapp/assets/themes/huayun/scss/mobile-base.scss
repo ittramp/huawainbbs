@@ -148,6 +148,7 @@ a[class*=" icon-"]:hover {
   text-decoration: none;
   color: $blue;
 }
+
 /* end icon */
 
 /* start tip */
@@ -727,20 +728,25 @@ ul.CodeMirror-hints {
 .CodeMirror pre.CodeMirror-placeholder {
   color: #999;
 }
+
 #revision .revisions {
   margin: 5px 0 15px;
   text-align: center;
+
   a {
     color: $black-light;
     vertical-align: middle;
+
     &:hover {
       color: $black-text;
     }
+
     &.disabled {
       color: $fade;
       cursor: default;
     }
   }
+
   span {
     margin: 0 10px 0 10px;
   }
@@ -1144,7 +1150,7 @@ label.cmt-anonymous {
 }
 
 .comments > div.comments-header svg {
-  margin:3px 10px 0 0;
+  margin: 3px 10px 0 0;
 }
 
 .comments > div.comments-header a {
@@ -1922,7 +1928,7 @@ code .dec {
   background-color: #fff;
   display: block;
   margin: 20px auto;
-  background-image: url(../images/m-char.png);
+  background-image: url(../../../../images/m-char.png);
   background-size: cover;
 }
 
@@ -2247,6 +2253,7 @@ code .dec {
 .home-account {
   &__captch {
     position: relative;
+
     img {
       position: absolute;
       height: 31px;
@@ -2256,6 +2263,7 @@ code .dec {
     }
   }
 }
+
 /* end home */
 
 /* start notifications */
@@ -2263,6 +2271,7 @@ code .dec {
   a:hover {
     text-decoration: none;
   }
+
   a {
     display: inline-block !important;
   }
@@ -2298,6 +2307,7 @@ code .dec {
   left: 45px;
   top: 45px;
 }
+
 /* end follow */
 
 /* start admin */
