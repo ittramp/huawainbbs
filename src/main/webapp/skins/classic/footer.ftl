@@ -56,12 +56,10 @@
             <div class="fn-clear ft-smaller">
             ${sloganLabel}
                 <div class="fn-right">
+                    清华大学·紫星云Copyright © ${year}
                     <#if footerBeiAnHao != ''>
-                        <a href="http://www.miitbeian.gov.cn/" target="_blank">${footerBeiAnHao}</a> •
+                        <a href="http://www.miitbeian.gov.cn/" target="_blank">${footerBeiAnHao}</a>
                     </#if>
-                    © ${year} <a href="https://b3log.org" target="_blank">B3log 开源</a>旗下云南链滴科技有限公司版权所有 •
-                    <a href="https://sym.b3log.org" target="_blank">Sym</a>
-                ${version} • ${elapsed?c}ms
                 </div>
             </div>
         </div>
