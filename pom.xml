@@ -316,6 +316,7 @@
                 <artifactId>jetty-maven-plugin</artifactId>
                 <version>${jetty.version}</version>
                 <configuration>
+                    <scanIntervalSeconds>2</scanIntervalSeconds>
                     <httpConnector>
                         <port>8080</port>
                     </httpConnector>

@@ -20,7 +20,7 @@
 <div class="footer">
     <div class="wrapper">
         <div class="slogan">
-        ${indexIntroLabel} &nbsp; &nbsp;
+            ${indexIntroLabel} &nbsp; &nbsp;
             <a href="https://github.com/b3log/symphony" target="_blank" class="tooltipped tooltipped-n"
                aria-label="${siteCodeLabel}">
                 <svg class="icon-github">
@@ -48,19 +48,15 @@
                 <a href="${servePath}/domains">${domainLabel}</a>
                 <a href="${servePath}/tags">${tagLabel}</a>
                 <a href="${servePath}/statistic">${dataStatLabel}</a>
-                <div class="fn-right">
-                    <a rel="copyright" href="https://hacpai.com" target="_blank">hacpai.com</a>
-                ${visionLabel}
-                </div>
             </div>
-            <div class="fn-clear ft-smaller">
-            ${sloganLabel}
-                <div class="fn-right">
-                    清华大学·紫星云Copyright © ${year}
-                    <#if footerBeiAnHao != ''>
-                        <a href="http://www.miitbeian.gov.cn/" target="_blank">${footerBeiAnHao}</a>
-                    </#if>
-                </div>
+        </div>
+        <div class="copyright fn-clear ft-smaller">
+            <#--${sloganLabel}-->
+            <div class="fn-right">
+                清华大学·紫星云Copyright © ${year}
+                <#if footerBeiAnHao != ''>
+                    <a href="http://www.miitbeian.gov.cn/" target="_blank">${footerBeiAnHao}</a>
+                </#if>
             </div>
         </div>
     </div>
@@ -100,10 +96,10 @@
         newFollowerLabel: '${newFollowerLabel}',
         makeAsReadLabel: '${makeAsReadLabel}',
         <#if isLoggedIn>
-            currentUserName: '${currentUser.userName}',
+        currentUserName: '${currentUser.userName}',
         </#if>
         <#if csrfToken??>
-            csrfToken: '${csrfToken}'
+        csrfToken: '${csrfToken}'
         </#if>
     }
 
@@ -123,9 +119,9 @@
     </#if>
 </script>
 <#if algoliaEnabled>
-<script src="${staticServePath}/js/lib/algolia/algolia.min.js"></script>
-<script>
-    Util.initSearch('${algoliaAppId}', '${algoliaSearchKey}', '${algoliaIndex}')
-</script>
+    <script src="${staticServePath}/js/lib/algolia/algolia.min.js"></script>
+    <script>
+        Util.initSearch('${algoliaAppId}', '${algoliaSearchKey}', '${algoliaIndex}')
+    </script>
 </#if>
 ${footerPCCode}

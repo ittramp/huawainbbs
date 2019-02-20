@@ -24,6 +24,7 @@
  */
 @import "variables";
 @import "common";
+@import "icons";
 
 /* start common business */
 .article-list .cb-stick {
@@ -854,7 +855,6 @@ a[class*=" icon-"]:hover {
               -webkit-font-smoothing: subpixel-antialiased;
               padding: 0;
               margin-top: 0;
-
               margin-bottom: 0.2rem;
 
               & > * {
@@ -891,12 +891,10 @@ a[class*=" icon-"]:hover {
   }
 
   // 搜索框
-  input::-webkit-input-placeholder {
-    color: #ddd;
-  }
-
+  input::-webkit-input-placeholder,
   input::placeholder {
     color: #ddd;
+    font-size: 0.16rem;
   }
 
   input.search {
@@ -1022,6 +1020,8 @@ a[class*=" icon-"]:hover {
   position: relative;
   z-index: 40;
   background-color: $footer-bgColor;
+
+
 
   a {
     color: #afb1b3;
