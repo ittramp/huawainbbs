@@ -148,8 +148,8 @@
                 </div>
             <#else>
             <#--未登录时显示的按钮-->
-                <a href="javascript: Util.goLogin();" class="unlogin">${loginLabel}</a>
-                <a href="javascript:Util.goRegister()" class="unlogin">${registerLabel}</a>
+                <a href="javascript:Util.goLogin();" class="nav_item unlogin">${loginLabel}</a>
+                <a href="javascript:Util.goRegister()" class="nav_item unlogin">${registerLabel}</a>
             </#if>
         </div>
     </div>
