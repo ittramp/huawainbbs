@@ -17,6 +17,7 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 -->
+<#--贴子的图标，比如是否为精华贴，贴子类型-->
 <#macro icon perfect type>
 <#if 1 == perfect>
     <span class="tooltipped tooltipped-e" aria-label="${perfectLabel}"><svg><use xlink:href="#perfect"></use></svg></span>

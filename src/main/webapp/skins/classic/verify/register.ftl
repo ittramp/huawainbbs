@@ -27,7 +27,7 @@
         <link rel="stylesheet" href="${staticServePath}/css/index.css?${staticResourceVersion}" />
         <link rel="canonical" href="${servePath}/register">
     </head>
-    <body>
+    <body class="page-register step-1">
         <#include "../header.ftl">
         <div class="main">
             <div class="wrapper verify">

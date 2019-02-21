@@ -471,7 +471,7 @@ public class LoginProcessor {
 
         final Map<String, Object> dataModel = renderer.getDataModel();
         dataModel.put(Common.REFERRAL, "");
-
+        //判断是否是邀请注册
         boolean useInvitationLink = false;
 
         String referral = context.param("r");
@@ -489,9 +489,11 @@ public class LoginProcessor {
         }
 
         final String code = context.param("code");
-        if (StringUtils.isBlank(code)) { // Register Step 1
+        // Register Step 1
+        if (StringUtils.isBlank(code)) {
             renderer.setTemplateName("verify/register.ftl");
-        } else { // Register Step 2
+        } else {
+            // Register Step 2
             final JSONObject verifycode = verifycodeQueryService.getVerifycode(code);
             if (null == verifycode) {
                 dataModel.put(Keys.MSG, langPropsService.get("verifycodeExpiredLabel"));
@@ -515,7 +517,7 @@ public class LoginProcessor {
                 }
             }
         }
-
+        // 是否允许注册新用户
         final String allowRegister = optionQueryService.getAllowRegister();
         dataModel.put(Option.ID_C_MISC_ALLOW_REGISTER, allowRegister);
         if (useInvitationLink && "2".equals(allowRegister)) {

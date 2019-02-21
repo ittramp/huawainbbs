@@ -76,7 +76,10 @@ function minUpload() {
         './src/main/webapp/js/lib/jquery/file-upload-9.10.1/jquery.fileupload.js',
         './src/main/webapp/js/lib/jquery/file-upload-9.10.1/jquery.fileupload-process.js',
         './src/main/webapp/js/lib/jquery/file-upload-9.10.1/jquery.fileupload-validate.js']
-    return gulp.src(jsJqueryUpload).pipe(uglify()).pipe(concat('jquery.fileupload.min.js')).pipe(gulp.dest('./src/main/webapp/js/lib/jquery/file-upload-9.10.1/'))
+    return gulp.src(jsJqueryUpload)
+        .pipe(uglify())
+        .pipe(concat('jquery.fileupload.min.js'))
+        .pipe(gulp.dest('./src/main/webapp/js/lib/jquery/file-upload-9.10.1/'))
 }
 
 function minCodemirrorJS() {
@@ -100,7 +103,10 @@ function minLibs() {
         './src/main/webapp/js/lib/jquery/jquery.hotkeys.js',
         './src/main/webapp/js/lib/jquery/jquery.pjax.js',
         './src/main/webapp/js/lib/nprogress/nprogress.js']
-    return gulp.src(jsCommonLib).pipe(uglify()).pipe(concat('libs.min.js')).pipe(gulp.dest('./src/main/webapp/js/lib/compress/'))
+    return gulp.src(jsCommonLib)
+        .pipe(uglify())
+        .pipe(concat('libs.min.js'))
+        .pipe(gulp.dest('./src/main/webapp/js/lib/compress/'))
 }
 
 function minArticleLibs() {
@@ -114,10 +120,18 @@ function minArticleLibs() {
         './src/main/webapp/js/lib/diff2html/diff2html.min.js',
         './src/main/webapp/js/lib/diff2html/diff2html-ui.min.js',
         './src/main/webapp/js/lib/diff2html/diff.min.js']
-    return gulp.src(jsArticleLib).pipe(uglify()).pipe(concat('article-libs.min.js')).pipe(gulp.dest('./src/main/webapp/js/lib/compress/'))
+    return gulp.src(jsArticleLib)
+        .pipe(uglify())
+        .pipe(concat('article-libs.min.js'))
+        .pipe(gulp.dest('./src/main/webapp/js/lib/compress/'))
 }
 
 gulp.task('default',
-    gulp.series(cleanProcess, sassProcess,
+    gulp.series(
+        cleanProcess,
+        sassProcess,
         gulp.parallel(minCodemirrorCSS, minJS, minUpload,
-            minCodemirrorJS, minLibs), gulp.parallel(minArticleCSS, minArticleLibs)))
+            minCodemirrorJS, minLibs),
+        gulp.parallel(minArticleCSS, minArticleLibs)
+    )
+)
