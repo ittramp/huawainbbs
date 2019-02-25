@@ -23,6 +23,8 @@
  * @version 2.33.1.1, Aug 20, 2018
  */
 @import "variables";
+//帖子列表
+@import "article-list";
 
 /* start list */
 .domains-count {
@@ -597,175 +599,6 @@ label.cmt-anonymous {
 
 /* end article */
 
-/* start article list */
-.article-list {
-
-  ul > li {
-    padding: 15px;
-  }
-
-  .stick li:last-child {
-    border-bottom-width: 0;
-  }
-
-  ul > li > h2 {
-    margin: 5px 0;
-  }
-
-  ul > li > h2 > a {
-    font-size: 16px;
-    font-weight: 700;
-  }
-
-  ul > li:hover .fn-hidden {
-    visibility: visible;
-  }
-
-  .abstract {
-    margin-top: 5px;
-    color: $theme-secondary;
-    display: block;
-    text-decoration: none;
-  }
-
-  .abstract-img {
-    width: 180px;
-    height: 135px;
-    border-radius: 2px;
-    margin-left: 10px;
-    background-size: cover;
-    background-position: center center;
-  }
-
-  ul > li > h2 > a:visited,
-  .abstract:visited {
-    color: #999;
-  }
-
-  .author {
-    color: $theme-secondary;
-    font-weight: 600;
-  }
-
-  .list-info {
-    line-height: 18px;
-  }
-}
-
-.heat {
-  position: absolute;
-  height: 5px;
-  background-color: $theme-accent;
-  z-index: 1;
-  bottom: -3px;
-  right: 0;
-}
-
-.point,
-.point-remove {
-  position: absolute;
-  height: 5px;
-  background-color: $theme-accent;
-  z-index: 1;
-  bottom: -3px;
-  right: 0px;
-  width: 5px;
-  -webkit-animation-duration: 2s;
-  animation-duration: 2s;
-  -webkit-animation-fill-mode: both;
-  animation-fill-mode: both;
-  -webkit-animation-name: slideInRight;
-  animation-name: slideInRight;
-}
-
-.point-remove {
-  animation-name: slideInLeft;
-  -webkit-animation-name: slideInLeft;
-}
-
-@keyframes slideInLeft {
-  0% {
-    right: 0;
-  }
-
-  100% {
-    right: 100%;
-  }
-}
-
-@-webkit-keyframes slideInLeft {
-  0% {
-    right: 0;
-  }
-
-  100% {
-    right: 100%;
-  }
-}
-
-@keyframes slideInRight {
-  0% {
-    right: 100%;
-  }
-
-  100% {
-    right: 0;
-  }
-}
-
-@-webkit-keyframes slideInRight {
-  0% {
-    right: 100%;
-  }
-
-  100% {
-    right: 0;
-  }
-}
-
-.article-level0 {
-  color: $fade;
-}
-
-.article-level1 {
-  color: #ffcc00;
-}
-
-.article-level2 {
-  color: #ffc1cc;
-}
-
-.article-level3 {
-  color: #ff6633;
-}
-
-.article-level4 {
-  color: $theme-accent;
-}
-
-.recent-rss {
-  color: #ff9933 !important;
-  float: right;
-  margin: 2px 0 0 10px;
-
-  &:hover {
-    color: $blue !important;
-  }
-}
-
-.domain-rss {
-  color: #ff9933 !important;
-
-  svg {
-    vertical-align: sub;
-  }
-
-  &:hover {
-    color: $blue !important;
-  }
-}
-
-/* end article list */
 
 /* start verify */
 .verify {
@@ -1086,15 +919,16 @@ code .dec {
 
 /* 首页页面 */
 .index {
+  flex-flow: row;
   // 精华及热门帖子
   .index-main {
-    width: 60%;
+    flex-grow: 1;
   }
 
   //侧边框
   .index-side {
     margin-left: 2px;
-    width: 40%;
+    flex-basis: 310px;
   }
 }
 

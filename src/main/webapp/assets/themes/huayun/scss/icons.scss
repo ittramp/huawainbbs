@@ -1,3 +1,10 @@
+.icon {
+  display: inline-block;
+  height: 16px;
+  width: 16px;
+  vertical-align: middle;
+}
+
 .icon-diamond {
   background: url(../images/icons/icon-diamond.png) no-repeat center center;
 }
@@ -8,4 +15,12 @@
 
 .icon-fire {
   background: url(../images/icons/icon-fire.png)  no-repeat center center;
+}
+
+.icon-comment {
+  background: url(../images/icons/icon-comment.png)  no-repeat center center;
+}
+
+.icon-view {
+  background: url(../images/icons/icon-view.png)  no-repeat center center;
 }

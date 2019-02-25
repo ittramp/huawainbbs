@@ -1,0 +1,56 @@
+.article-list {
+  //单个的帖子列表
+  .article-item {
+    border-bottom: 1px dashed rgba(135, 141, 164, 0.2);
+    padding: 10px;
+
+    // 去除列表的样式
+    ul {
+      li {
+        list-style: none;
+      }
+    }
+
+    // 左侧的头像信息
+    .left {
+      margin-right: 0.15rem;
+
+      & > a {
+        display: block;
+        position: relative;
+        top:50%;
+        transform: translateY(-50%);
+      }
+
+      .avatar {
+        width: 0.42rem;
+        height: 0.42rem;
+      }
+    }
+
+    // 中间显示文章的主要信息
+    .center {
+      flex-grow: 1;
+      line-height: 0.28rem;
+
+      // 第二行的文字大小
+      & > li:nth-of-type(2) {
+        font-size: 0.14rem;
+        .info-item + .info-item {
+          margin-left: 0.2rem;
+        }
+      }
+
+      //文章的标题
+      .ft-a-title {
+        color: #666666;
+        text-decoration: none;
+        font-size: 0.16rem;
+      }
+    }
+
+    .right {
+      line-height: 0.28rem;
+    }
+  }
+}

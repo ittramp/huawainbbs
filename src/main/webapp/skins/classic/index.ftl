@@ -39,8 +39,27 @@
     <div class="wrapper">
         <#--贴子显示区域-->
         <div class="index-main">
+            <div class="article-selector">
+                <span>全部</span>
+                <span>精华帖</span>
+                <select>
+                    <option value="最新发布">最新发布</option>
+                    <option value="最新更新">最新更新</option>
+                    <option value="查看数">查看数</option>
+                    <option value="回帖数">回帖数</option>
+                </select>
+                <select>
+                    <option value="0">全部时间</option>
+                    <option value="today">今天</option>
+                    <option value="3day">三天</option>
+                    <option value="1weak">一周</option>
+                    <option value="1month">一月</option>
+                    <option value="3month">三月</option>
+                    <option value="6month">半年</option>
+                </select>
+            </div>
             <#-- ############# 最新贴子列表 ############## -->
-            <div class="index-tabs-panels list article-list">
+            <div class="index-tabs-panels article-list">
                 <ul>
                     <#list recentArticles as article>
                     <#--单个贴子项-->

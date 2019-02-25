@@ -26,12 +26,12 @@
 
         <ul class="nav-tabs">
             <#--首页-->
-            <li class="nav-item">
-                <a class="nav-item__title" pjax-title="${latestLabel} - ${symphonyLabel}"
-                   href="${servePath}">
-                    ${indexLabel}
-                </a>
-            </li>
+            <#--<li class="nav-item">-->
+                <#--<a class="nav-item__title" pjax-title="${latestLabel} - ${symphonyLabel}"-->
+                   <#--href="${servePath}">-->
+                    <#--${indexLabel}-->
+                <#--</a>-->
+            <#--</li>-->
             <#--用户自定义的版块(即domain)-->
             <li class="nav-item all_domains">
                 <span class="nav-item__title">

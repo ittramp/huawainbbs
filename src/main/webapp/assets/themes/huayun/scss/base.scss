@@ -438,10 +438,12 @@ a[class*=" icon-"]:hover {
     height: 32px;
     width: 32px;
   }
+
   &-mid {
     height: 60px;
     width: 60px;
   }
+
   &-big {
     height: 210px;
     width: 210px;
@@ -714,7 +716,7 @@ a[class*=" icon-"]:hover {
   margin: 0 auto;
   display: flex;
   min-width: 720px;
-  max-width: 1300px;
+  max-width: 1200px;
 }
 
 .wrapper > .module:last-child {
@@ -800,6 +802,10 @@ a[class*=" icon-"]:hover {
       .nav-item__title {
         color: $menu-item-color;
         font-size: 0.18rem;
+      }
+
+      &.all_domains {
+        display: none;
       }
 
       //子菜单
@@ -935,7 +941,7 @@ a[class*=" icon-"]:hover {
           transform: translateY(-2px);
         }
 
-      //  有消息时的样式
+        //  有消息时的样式
         &.msg {
           .icon {
             &::after {
@@ -1019,7 +1025,6 @@ a[class*=" icon-"]:hover {
   position: relative;
   z-index: 40;
   background-color: $footer-bgColor;
-
 
 
   a {

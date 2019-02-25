@@ -539,7 +539,11 @@ public class ArticleQueryService {
 	 * @return articles, return an empty list if not found
 	 * @throws ServiceException service exception
 	 */
-	public List<JSONObject> getValidArticles(final int currentPageNum, final int pageSize, final int... types) throws ServiceException {
+	public List<JSONObject> getValidArticles(
+			final int currentPageNum,
+			final int pageSize,
+			final int... types
+	) throws ServiceException {
 		try {
 			final Query query = new Query().addSort(Keys.OBJECT_ID, SortDirection.DESCENDING)
 					.setPageCount(1).setPageSize(pageSize).setCurrentPageNum(currentPageNum);
@@ -853,7 +857,7 @@ public class ArticleQueryService {
 				filter = filters.get(0);
 			}
 
-			// XXX: 这里的分页是有问题的，后面取文章的时候会少（因为一篇文章可以有多个标签，但是文章 id 一样）
+			// FIXME: 这里的分页是有问题的，后面取文章的时候会少（因为一篇文章可以有多个标签，但是文章 id 一样）
 			Query query = new Query().addSort(Keys.OBJECT_ID, SortDirection.DESCENDING).
 					setFilter(filter).setPageCount(1).setPageSize(pageSize).setCurrentPageNum(currentPageNum);
 
@@ -1307,7 +1311,7 @@ public class ArticleQueryService {
 	}
 
 	/**
-	 * Gets the recent articles with the specified fetch size.
+	 * 获取最新的帖子列表，并可以指定获取的列表的大小
 	 *
 	 * @param avatarViewMode the specified avatar view mode
 	 * @param sortMode       the specified sort mode, 0: default, 1: hot, 2: score, 3: reply
@@ -1412,7 +1416,7 @@ public class ArticleQueryService {
 	}
 
 	/**
-	 * Gets the index recent articles.
+	 * 获取最新的帖子列表
 	 *
 	 * @param avatarViewMode the specified avatar view mode
 	 * @return recent articles, returns an empty list if not found
@@ -1462,7 +1466,7 @@ public class ArticleQueryService {
 	}
 
 	/**
-	 * Gets the hot articles with the specified fetch size.
+	 * 获取最热的帖子列表，可以指定获取的列表的大小
 	 *
 	 * @param avatarViewMode the specified avatar view mode
 	 * @param fetchSize      the specified fetch size
@@ -1531,7 +1535,11 @@ public class ArticleQueryService {
 	 * }
 	 * </pre>
 	 */
-	public JSONObject getPerfectArticles(final int avatarViewMode, final int currentPageNum, final int fetchSize) {
+	public JSONObject getPerfectArticles(
+			final int avatarViewMode,
+			final int currentPageNum,
+			final int fetchSize
+	) {
 		final Query query = new Query()
 				.addSort(Keys.OBJECT_ID, SortDirection.DESCENDING)
 				.setCurrentPageNum(currentPageNum).setPageSize(fetchSize);
@@ -1575,7 +1583,7 @@ public class ArticleQueryService {
 	}
 
 	/**
-	 * Gets the index perfect articles.
+	 * 获取首页精华(优先)帖子列表
 	 *
 	 * @return hot articles, returns an empty list if not found
 	 */
