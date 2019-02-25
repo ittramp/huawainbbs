@@ -491,7 +491,8 @@ public class IndexProcessor {
 	@Before(StopwatchStartAdvice.class)
 	@After(StopwatchEndAdvice.class)
 	public void showAbout(final RequestContext context) {
-		context.sendRedirect("https://hacpai.com/article/1440573175609");
+		//FIXME: 需要跳转到关于页面
+		// context.sendRedirect("https://hacpai.com/article/1440573175609");
 	}
 
 	/**

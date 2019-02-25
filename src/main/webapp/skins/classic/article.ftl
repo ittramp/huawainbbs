@@ -537,7 +537,7 @@
                 </svg>
             </a>
         </#if>
-<#--赞同按钮-->
+        <#--赞同按钮-->
         <span class="tooltipped tooltipped-w<#if isLoggedIn && 0 == article.articleVote> ft-red</#if>"
               aria-label="${upLabel}"
                 <#if permissions["commonGoodArticle"].permissionGrant>
@@ -546,7 +546,7 @@
                         onclick="Article.permissionTip(Label.noPermissionLabel)"
                 </#if>><svg class="icon-thumbs-up"><use
                         xlink:href="#thumbs-up"></use></svg> ${article.articleGoodCnt}</span>
-<#--反对按钮-->
+        <#--反对按钮-->
         <span class="tooltipped tooltipped-w<#if isLoggedIn && 1 == article.articleVote> ft-red</#if>"
               aria-label="${downLabel}"
                 <#if permissions["commonBadArticle"].permissionGrant>
@@ -555,7 +555,7 @@
                     onclick="Article.permissionTip(Label.noPermissionLabel)"
                 </#if>><svg class="icon-thumbs-down"><use
                         xlink:href="#thumbs-down"></use></svg> ${article.articleBadCnt}</span>
-<#--收藏按钮-->
+        <#--收藏按钮-->
         <#--如果已经登录，并且收藏了该贴子，则显示取消收藏-->
         <#if isLoggedIn && isFollowing>
             <span class="tooltipped tooltipped-w ft-red" aria-label="${uncollectLabel}"
@@ -574,7 +574,7 @@
                     </#if>><svg class="icon-star"><use
                             xlink:href="#star"></use></svg> ${article.articleCollectCnt}</span>
         </#if>
-<#--关注按钮-->
+        <#--关注按钮-->
         <#if isLoggedIn && isWatching>
             <span class="tooltipped tooltipped-w ft-red" aria-label="${unfollowLabel}"
                     <#if permissions["commonWatchArticle"].permissionGrant>
@@ -600,10 +600,12 @@
         </div>
     </div>
 </#if>
-<#--是否可以回贴-->
+<#--是否可以回帖,如果能回帖，则显示回帖按钮-->
 <#if discussionViewable>
     <span class="radio-btn" onclick="Comment._toggleReply()"
-          data-hasPermission="${permissions['commonAddComment'].permissionGrant?c}">${cmtLabel}</span>
+          data-hasPermission="${permissions['commonAddComment'].permissionGrant?c}">
+        ${cmtLabel}
+    </span>
 </#if>
 <#--如果已经登录，并且可以回贴，并且贴子允许评论，则显示评论编辑器-->
 <#if isLoggedIn && discussionViewable && article.articleCommentable>
@@ -616,16 +618,25 @@
                     <span class="tooltipped tooltipped-w fn-pointer editor-hide" onclick="Comment._toggleReply()"
                           aria-label="${cancelLabel}"> <svg><use xlink:href="#chevron-down"></use></svg></span>
                 </div>
+                <#--发表回复的区域-->
                 <div class="article-comment-content">
+                    <#--回复的内容区域-->
                     <textarea id="commentContent" placeholder="${commentEditorPlaceholderLabel}"></textarea>
+                    <#--发表回复的按钮-->
                     <div class="comment-submit">
+                        <#--是否可以匿名回复-->
                         <#if permissions["commonAddCommentAnonymous"].permissionGrant>
                             <label class="cmt-anonymous">${anonymousLabel}<input type="checkbox" id="commentAnonymous"></label>
                         </#if>
-                        <label class="cmt-anonymous">${onlyArticleAuthorVisibleLabel}<input type="checkbox"
-                                                                                            id="commentVisible"></label>
-                        <button class="green"
-                                onclick="Comment.add('${article.oId}', '${csrfToken}', this)">${submitLabel}</button>
+                        <#--是否只让贴主看该回复-->
+                        <label class="cmt-anonymous">
+                            ${onlyArticleAuthorVisibleLabel}
+                            <input type="checkbox" id="commentVisible">
+                        </label>
+                        <#--发表回复的按钮-->
+                        <button class="green" onclick="Comment.add('${article.oId}', '${csrfToken}', this)">
+                            ${submitLabel}
+                        </button>
                         &nbsp; &nbsp;
                         <a class="fn-pointer ft-a-title" href="javascript:Comment._toggleReply()">${cancelLabel}</a>
                         <div class="tip fn-right" id="addCommentTip"></div>

@@ -873,10 +873,14 @@ a[class*=" icon-"]:hover {
       }
     }
 
+    a {
+      text-decoration: none;
+      color: $menu-item-color;
+    }
+
     svg {
       margin: 3px 2px 0 0;
       visibility: hidden;
-      float: left;
     }
 
     //鼠标放上去，或者页面是当前菜单项时显示菜单项的图标

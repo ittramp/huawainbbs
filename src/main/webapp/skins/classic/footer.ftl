@@ -20,30 +20,10 @@
 <div class="footer">
     <div class="wrapper">
         <div class="slogan">
-            ${indexIntroLabel} &nbsp; &nbsp;
-            <a href="https://github.com/b3log/symphony" target="_blank" class="tooltipped tooltipped-n"
-               aria-label="${siteCodeLabel}">
-                <svg class="icon-github">
-                    <use xlink:href="#github"></use>
-                </svg>
-            </a> &nbsp;
-            <a href="http://weibo.com/u/2778228501" target="_blank" class="tooltipped tooltipped-n"
-               aria-label="${followWeiboLabel}">
-                <svg class="icon-weibo">
-                    <use xlink:href="#weibo"></use>
-                </svg>
-            </a> &nbsp;
-            <a target="_blank" rel="noopener" class="tooltipped tooltipped-n" aria-label="${joinTelegramLabel}"
-               href="https://t.me/b3log">
-                <svg class="icon-telegram">
-                    <use xlink:href="#icon-telegram"></use>
-                </svg>
-            </a>
+            ${indexIntroLabel}
         </div>
         <div class="fn-flex-1">
             <div class="footer-nav fn-clear">
-                <a rel="help" href="${servePath}/about">${aboutLabel}</a>
-                <a href="https://hacpai.com/article/1457158841475">API</a>
                 <a href="${servePath}/tag/announcement">${symAnnouncementLabel}</a>
                 <a href="${servePath}/domains">${domainLabel}</a>
                 <a href="${servePath}/tags">${tagLabel}</a>
@@ -118,6 +98,7 @@
     Util.mouseClickEffects()
     </#if>
 </script>
+<#--如果启用了 'algolia' 引擎，则引入对应的js，并按照配置进行初始化-->
 <#if algoliaEnabled>
     <script src="${staticServePath}/js/lib/algolia/algolia.min.js"></script>
     <script>
