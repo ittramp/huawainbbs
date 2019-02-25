@@ -36,7 +36,7 @@ body {
   font-family: $font-family-base;
   font-size: 0.14rem;
   color: $black-text;
-  background-color: #fff;
+  background-color: #f6f6f6;
 }
 
 ::-moz-selection {
@@ -664,3 +664,28 @@ blockquote {
 }
 
 /* end aplayer */
+
+.bg-white {
+  background-color: $color-white;
+}
+
+// 自定义的tabs组件
+.tabs {
+  // tabs头标签
+  .tabs-header {
+    .tabs-header-item {
+      font-size: 0.18rem;
+      line-height: 0.18rem;
+      font-weight: bold;
+      padding: 0 0.1rem;
+      border: 1px solid transparent;
+      cursor: pointer;
+      color: #999999;
+
+      &.current {
+        border-bottom-color: #82308E;
+        color: #666666;
+      }
+    }
+  }
+}

@@ -36,19 +36,20 @@
 <#--首页主要显示区域-->
 <div class="main">
     <#--首页内容wrapper,用来设置最大宽度-->
-    <div class="wrapper">
+    <div class="wrapper bg-white">
         <#--贴子显示区域-->
-        <div class="index-main">
-            <div class="article-selector">
-                <span>全部</span>
-                <span>精华帖</span>
-                <select>
+        <div class="index-main tabs">
+            <div class="fn-clear article-selector tabs-header">
+                <span class="tabs-header-item selected">全部</span>
+                <span class="tabs-header-item">精华帖</span>
+                <span class="query-tools">
+                    <select>
                     <option value="最新发布">最新发布</option>
                     <option value="最新更新">最新更新</option>
                     <option value="查看数">查看数</option>
                     <option value="回帖数">回帖数</option>
                 </select>
-                <select>
+                    <select>
                     <option value="0">全部时间</option>
                     <option value="today">今天</option>
                     <option value="3day">三天</option>
@@ -57,10 +58,12 @@
                     <option value="3month">三月</option>
                     <option value="6month">半年</option>
                 </select>
+                </span>
             </div>
-            <#-- ############# 最新贴子列表 ############## -->
-            <div class="index-tabs-panels article-list">
-                <ul>
+
+            <div class="tabs-panels">
+                <#-- ############# 最新贴子列表 ############## -->
+                <ul class="article-list">
                     <#list recentArticles as article>
                     <#--单个贴子项-->
                         <#include "common/list-item.ftl">
@@ -79,23 +82,11 @@
                         <a class="more" href="${servePath}/recent">${moreRecentArticleLabel}</a>
                     </li>
                 </ul>
-            </div>
-            <#-- ############# 精华贴子列表 ############## -->
-            <div class="perfect-panel list">
-                <ul>
+                <#-- ############# 精华贴子列表 ############## -->
+                <ul class="article-list">
                     <#list perfectArticles as article>
-                        <li>
-                            <a rel="nofollow" href="${servePath}/member/${article.articleAuthorName}">
-                                <span class="avatar-small tooltipped tooltipped-se"
-                                      aria-label="${article.articleAuthorName}"
-                                      style="background-image:url('${article.articleAuthorThumbnailURL48}')"></span>
-                            </a>
-                            <a rel="nofollow" class="fn-ellipsis ft-a-title"
-                               href="${servePath}${article.articlePermalink}">${article.articleTitleEmoj}</a>
-                            <a class="fn-right count ft-gray ft-smaller"
-                               href="${servePath}${article.articlePermalink}"><#if article.articleViewCount < 1000>
-                                    ${article.articleViewCount}<#else>${article.articleViewCntDisplayFormat}</#if></a>
-                        </li>
+                    <#--单个贴子项-->
+                        <#include "common/list-item.ftl">
                     </#list>
                     <#if perfectArticles?size == 0>
                         <li>${chickenEggLabel}</li>

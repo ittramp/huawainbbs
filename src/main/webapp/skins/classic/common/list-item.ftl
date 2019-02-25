@@ -17,6 +17,7 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 -->
+<#include "title-icon.ftl">
 <li class="article-item fn-flex">
     <#--帖子作者的头像-->
     <div class="left">
@@ -42,7 +43,9 @@
                href="${servePath}${article.articlePermalink}">${article.articleTitleEmoj}
             </a>
             <#--帖子的类型图标,即:'精华帖','置顶帖'等-->
-            <@icon article.articlePerfect article.articleType></@icon>
+            <span class="article-icons">
+                <@icon article.articlePerfect article.articleType article.articleStick></@icon>
+            </span>
         </li>
         <li>
             <#--作者的名称-->
@@ -63,7 +66,7 @@
                         <a rel="nofollow" class="author" href="${servePath}/member/${article.articleLatestCmterName}"></#if>
                     <span class="author">${article.articleLatestCmterName}</span><#if article.articleLatestCmterName != 'someone'></a>
                 </#if>
-                     在 ${article.cmtTimeAgo}${cmtLabel}
+                    在 ${article.cmtTimeAgo}${cmtLabel}
                 </#if>
             </span>
         </li>
@@ -82,11 +85,4 @@
             </a>
         </li>
     </ul>
-    <#--置顶帖子的图标信息-->
-    <#if article.articleStick gt 0>
-        <span class="cb-stick tooltipped tooltipped-e"
-              aria-label="<#if article.articleStick < 9223372036854775807>${stickLabel}${remainsLabel} ${article.articleStickRemains?c} ${minuteLabel}<#else>${adminLabel}${stickLabel}</#if>">
-            <svg class="icon-pin"><use xlink:href="#pin"></use></svg>
-        </span>
-    </#if>
 </li>

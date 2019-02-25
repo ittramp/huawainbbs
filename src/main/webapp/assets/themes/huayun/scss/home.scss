@@ -358,28 +358,28 @@
   padding: 50px 0;
 }
 
-.tabs {
-  display: flex;
-}
-
-.tabs a {
-  line-height: 18px;
-  flex: 1;
-  padding: 7px 10px 5px;
-  color: #616161;
-  border-bottom: 2px solid transparent;
-  text-decoration: none;
-  text-align: center
-}
-
-.tabs a.selected {
-  border-color: $theme-accent;
-  color: #212121;
-}
-
-.tabs a:hover {
-  background-color: rgba(0, 0, 0, .02);
-}
+//.tabs {
+//  display: flex;
+//}
+//
+//.tabs a {
+//  line-height: 18px;
+//  flex: 1;
+//  padding: 7px 10px 5px;
+//  color: #616161;
+//  border-bottom: 2px solid transparent;
+//  text-decoration: none;
+//  text-align: center
+//}
+//
+//.tabs a.selected {
+//  border-color: $theme-accent;
+//  color: #212121;
+//}
+//
+//.tabs a:hover {
+//  background-color: rgba(0, 0, 0, .02);
+//}
 
 .tabs-sub > a > .count {
   transform: scale(0.8);

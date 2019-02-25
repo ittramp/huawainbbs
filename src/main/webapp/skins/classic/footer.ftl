@@ -95,7 +95,8 @@
     </#if>
 
     <#if mouseEffects>
-    Util.mouseClickEffects()
+    <#--禁用鼠标效果-->
+        // Util.mouseClickEffects()
     </#if>
 </script>
 <#--如果启用了 'algolia' 引擎，则引入对应的js，并按照配置进行初始化-->
