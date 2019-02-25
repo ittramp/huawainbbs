@@ -674,17 +674,38 @@ blockquote {
   // tabs头标签
   .tabs-header {
     .tabs-header-item {
+      box-sizing: border-box;
       font-size: 0.18rem;
       line-height: 0.18rem;
       font-weight: bold;
       padding: 0 0.1rem;
-      border: 1px solid transparent;
+      border: 2px solid transparent;
       cursor: pointer;
       color: #999999;
+      //display: inline-block;
+      height: 100%;
+      vertical-align: top;
+      display: inline-flex;
+      align-items: center;
 
-      &.current {
+      .title {
+        font-size: 0.18rem;
+      }
+      &.selected {
         border-bottom-color: #82308E;
         color: #666666;
+      }
+    }
+  }
+
+  // tab-panel
+
+  .tabs-panels {
+    .tabs-panel {
+      display: none;
+
+      &.selected {
+        display: block;
       }
     }
   }

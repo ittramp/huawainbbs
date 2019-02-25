@@ -40,8 +40,12 @@
         <#--贴子显示区域-->
         <div class="index-main tabs">
             <div class="fn-clear article-selector tabs-header">
-                <span class="tabs-header-item selected">全部</span>
-                <span class="tabs-header-item">精华帖</span>
+                <span class="tabs-header-item selected">
+                    <span class="title">全部</span>
+                </span>
+                <span class="tabs-header-item">
+                    <span class="title">精华帖</span>
+                </span>
                 <span class="query-tools">
                     <select>
                     <option value="最新发布">最新发布</option>
@@ -63,7 +67,7 @@
 
             <div class="tabs-panels">
                 <#-- ############# 最新贴子列表 ############## -->
-                <ul class="article-list">
+                <ul class="article-list tabs-panel selected">
                     <#list recentArticles as article>
                     <#--单个贴子项-->
                         <#include "common/list-item.ftl">
@@ -77,13 +81,13 @@
                             <img src="${staticServePath}/images/404/5.gif"/>
                         </li>
                     </#if>
-                    <#--更多贴子按钮-->
-                    <li>
-                        <a class="more" href="${servePath}/recent">${moreRecentArticleLabel}</a>
-                    </li>
+                    <#--&lt;#&ndash;更多贴子按钮&ndash;&gt;-->
+                    <#--<li>-->
+                    <#--<a class="more" href="${servePath}/recent">${moreRecentArticleLabel}</a>-->
+                    <#--</li>-->
                 </ul>
                 <#-- ############# 精华贴子列表 ############## -->
-                <ul class="article-list">
+                <ul class="article-list tabs-panel">
                     <#list perfectArticles as article>
                     <#--单个贴子项-->
                         <#include "common/list-item.ftl">
@@ -96,11 +100,33 @@
         </div>
         <#--侧边框-->
         <div class="index-side">
-
+            <div class="btn-post">
+                <i class="icon icon-post"></i>发帖
+            </div>
+            <div class="">
+                <ul>
+                    <li><i class="icon icon-calendar"></i></li>
+                    <li>星期四</li>
+                    <li>2019-02-25</li>
+                </ul>
+                <div>
+                    <li>
+                        <i class="icon icon-checkin"></i>
+                    </li>
+                    <li>签到</li>
+                    <li>已签到222天</li>
+                </div>
+            </div>
         </div>
     </div>
 </div>
 <#include "footer.ftl">
 <script src="${staticServePath}/js/channel${miniPostfix}.js?${staticResourceVersion}"></script>
+<script>
+    $(".tabs-header-item").click(function () {
+        $(".tabs-header-item").toggleClass("selected");
+        $(".tabs-panel").toggleClass("selected");
+    })
+</script>
 </body>
 </html>

@@ -929,6 +929,13 @@ code .dec {
   .index-side {
     margin-left: 2px;
     flex-basis: 310px;
+
+    .btn-post {
+      color: #878DA4;
+      font-size: 36px;
+      width: 314px;
+      height: 101px;
+    }
   }
 }
 
