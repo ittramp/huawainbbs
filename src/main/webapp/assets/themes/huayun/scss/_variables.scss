@@ -100,3 +100,7 @@ $footer-bgColor: #a04bac;
 
 // index page
 $article-selector-height: 0.52rem;
+
+@mixin card {
+  box-shadow: 3px 3px 5px rgba(0,0,0,0.1);
+}

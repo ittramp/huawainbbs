@@ -36,9 +36,9 @@
 <#--首页主要显示区域-->
 <div class="main">
     <#--首页内容wrapper,用来设置最大宽度-->
-    <div class="wrapper bg-white">
+    <div class="wrapper">
         <#--贴子显示区域-->
-        <div class="index-main tabs">
+        <div class="index-main bg-white tabs">
             <div class="fn-clear article-selector tabs-header">
                 <span class="tabs-header-item selected">
                     <span class="title">全部</span>
@@ -100,22 +100,27 @@
         </div>
         <#--侧边框-->
         <div class="index-side">
-            <div class="btn-post">
-                <i class="icon icon-post"></i>发帖
-            </div>
-            <div class="">
-                <ul>
+            <#--发帖按钮-->
+            <a class="btn-post bg-white" href="${servePath}/post?type=0">
+                <i class="icon icon-post"></i>
+                <span class="btn-text">发帖</span>
+            </a>
+
+            <div class="panel-checkin">
+                <#--今天的日期展示-->
+                <ul class="bg-white">
                     <li><i class="icon icon-calendar"></i></li>
                     <li>星期四</li>
                     <li>2019-02-25</li>
                 </ul>
-                <div>
+                <#--单天签到的按钮-->
+                <ul class="bg-white">
                     <li>
                         <i class="icon icon-checkin"></i>
                     </li>
                     <li>签到</li>
-                    <li>已签到222天</li>
-                </div>
+                    <li>已签到天数</li>
+                </ul>
             </div>
         </div>
     </div>

@@ -927,14 +927,59 @@ code .dec {
 
   //侧边框
   .index-side {
-    margin-left: 2px;
-    flex-basis: 310px;
+    margin-left: 0.2rem;
+    flex-basis: 3.1rem;
 
+    // 发帖按钮
     .btn-post {
       color: #878DA4;
-      font-size: 36px;
-      width: 314px;
-      height: 101px;
+      font-size: 0.36rem;
+      width: 3.14rem;
+      height: 1.01rem;
+      text-align: center;
+      line-height: 1.01rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-decoration: none;
+      @include card;
+
+      //文字
+      .btn-text {
+        margin-left: 0.2rem;
+      }
+    }
+
+    .panel-checkin {
+      margin-top: 0.2rem;
+      display: flex;
+
+      ul {
+        display: flex;
+        flex-flow: column;
+        justify-content: center;
+
+        width: 147px;
+        height: 126px;
+        @include card;
+
+        li {
+          text-align: center;
+          &:nth-of-type(1) {
+          }
+          &:nth-of-type(2) {
+            font-size: 0.2rem;
+            margin-top: 0.09rem;
+          }
+          &:nth-of-type(3) {
+            font-size: 0.16rem;
+            margin-top: 0.12rem;
+          }
+        }
+      }
+      ul + ul {
+        margin-left: 0.2rem;
+      }
     }
   }
 }
