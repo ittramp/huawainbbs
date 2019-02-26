@@ -122,6 +122,52 @@
                     <li>已签到天数</li>
                 </ul>
             </div>
+
+            <div class="module bg-white">
+                <div class="module-header">
+                    <i class="icon icon-bulb"></i>
+                    <span class="header-text">最新资讯</span>
+                </div>
+                <div class="module-panel">
+                </div>
+            </div>
+
+            <div class="module bg-white">
+                <div class="module-header">
+                    <i class="icon icon-fire"></i>
+                    <span class="header-text">热门帖</span>
+                </div>
+                <div class="module-panel">
+                    <ul class="article-list">
+                        <#list sideHotArticles as article>
+                            <#include "common/side-hot-article.ftl" />
+                        </#list>
+                    </ul>
+                </div>
+            </div>
+            <#--排行榜功能-->
+            <div class="module bg-white">
+                <div class="module-header">
+                    <i class="icon icon-bar"></i>
+                    <span class="header-text">排行榜</span>
+                </div>
+                <div class="module-panel">
+                    <div class="tabs">
+                        <div class="tabs-header">
+                            <span class="tabs-header-item">贡献榜</span>
+                            <span class="tabs-header-item">活跃榜</span>
+                        </div>
+                        <div class="tabs-panels">
+                            <div class="tabs-panel">
+                                贡献榜排名
+                            </div>
+                            <div class="tabs-panel">
+                                活跃榜排名
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
@@ -129,7 +175,10 @@
 <script src="${staticServePath}/js/channel${miniPostfix}.js?${staticResourceVersion}"></script>
 <script>
     $(".tabs-header-item").click(function () {
-        $(".tabs-header-item").toggleClass("selected");
+        var parentObj = $(this).parent(".tabs");
+        $(this).addClass("selected")
+            .siblings(".tabs-header-item").removeClass("selected");
+
         $(".tabs-panel").toggleClass("selected");
     })
 </script>

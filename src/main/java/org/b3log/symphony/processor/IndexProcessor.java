@@ -286,12 +286,28 @@ public class IndexProcessor {
 		// 精华贴
 		final List<JSONObject> perfectArticles = articleQueryService.getIndexPerfectArticles();
 		dataModel.put(Common.PERFECT_ARTICLES, perfectArticles);
+
+		// 获取热门帖子的获取数量
+		int hotArticleFetchCount = Symphonys.getInt("sideHotArticlesCnt");
+		// 获取热门帖子列表
+		final List<JSONObject> hotArticles = articleQueryService.getHotArticles(avatarViewMode, hotArticleFetchCount);
+		dataModel.put(Common.SIDE_HOT_ARTICLES, hotArticles);
+
 		// 填充页面的 header 及 footer
 		dataModelService.fillHeaderAndFooter(context, dataModel);
 		// 填充tags数据
 		dataModelService.fillIndexTags(dataModel);
 
 		dataModel.put(Common.SELECTED, Common.INDEX);
+	}
+
+	private int getIndexArticleFetchCount(RequestContext context) {
+		int pageSize = Symphonys.getInt("indexArticlesCnt");
+		final JSONObject user = (JSONObject) context.attr(Common.CURRENT_USER);
+		if (null != user) {
+			pageSize = user.optInt(UserExt.USER_LIST_PAGE_SIZE);
+		}
+		return pageSize;
 	}
 
 	/**
@@ -403,15 +419,11 @@ public class IndexProcessor {
 		context.setRenderer(renderer);
 		renderer.setTemplateName("hot.ftl");
 		final Map<String, Object> dataModel = renderer.getDataModel();
-
-		int pageSize = Symphonys.getInt("indexArticlesCnt");
-		final JSONObject user = (JSONObject) context.attr(Common.CURRENT_USER);
-		if (null != user) {
-			pageSize = user.optInt(UserExt.USER_LIST_PAGE_SIZE);
-		}
+		// 获取首页获取文章列表的数量大小
+		int indexArticleFetchCount = getIndexArticleFetchCount(context);
 
 		final int avatarViewMode = (int) context.attr(UserExt.USER_AVATAR_VIEW_MODE);
-		final List<JSONObject> indexArticles = articleQueryService.getHotArticles(avatarViewMode, pageSize);
+		final List<JSONObject> indexArticles = articleQueryService.getHotArticles(avatarViewMode, indexArticleFetchCount);
 		dataModel.put(Common.INDEX_ARTICLES, indexArticles);
 		dataModel.put(Common.SELECTED, Common.HOT);
 

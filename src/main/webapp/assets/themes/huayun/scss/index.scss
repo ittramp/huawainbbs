@@ -981,6 +981,21 @@ code .dec {
         margin-left: 0.2rem;
       }
     }
+
+    .module  {
+      @include card;
+      margin-top: 0.2rem;
+
+      .module-header {
+        color: #878DA4;
+        font-size: 0.18rem;
+        line-height: 0.18rem;
+
+        .header-text {
+          margin-left: 0.1rem;
+        }
+      }
+    }
   }
 }
 

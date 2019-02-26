@@ -1,0 +1,114 @@
+/* start side module */
+@import "variables";
+
+.side .module:last-child {
+  margin-bottom: 0;
+}
+
+.module {
+  margin-bottom: 20px;
+  border-radius: 3px;
+  width: 100%;
+  word-wrap: break-word;
+  box-sizing: border-box;
+  min-width: 1px;
+
+  .module-header {
+    border-radius: 3px 3px 0 0;
+    border-bottom: 1px solid #eee;
+    padding: 8px 15px;
+    font-size: 14px;
+    line-height: 19px;
+
+    & > * {
+      vertical-align: middle;
+    }
+
+    h2 {
+      display: inline;
+      font-size: 13px;
+      color: $theme-secondary;
+      font-weight: normal;
+    }
+  }
+
+  .module-panel {
+    border-radius: 0 0 5px 5px;
+
+    strong {
+      display: inline-block;
+      margin-top: 14px;
+    }
+
+    .module-list {
+      li {
+        list-style: none outside none;
+        padding: 15px;
+        position: relative;
+
+        &.last, &:last-child {
+          border-bottom-width: 0;
+        }
+      }
+    }
+  }
+
+  .comment-content {
+    color: $gray;
+    float: left;
+    margin-left: 5px;
+    width: 210px;
+  }
+}
+
+.module-panel.form {
+  padding: 15px;
+}
+
+.module-list .slogan {
+  position: absolute;
+  top: 50%;
+  margin-top: -10px;
+}
+
+.module-list .title {
+  color: $theme-secondary;
+  margin: 0px 0 0px 30px;
+  display: block;
+  line-height: 20px;
+}
+
+.module-list.open-source .title {
+  margin-left: 60px;
+}
+
+.module-list.open-source .slogan {
+  margin-top: -10px;
+}
+
+.module-panel.ad {
+  padding: 15px;
+  text-align: center;
+}
+
+.module-panel.ad .header {
+  color: $black-text;
+}
+
+.module-panel.ad img {
+  margin-bottom: 5px;
+  margin-top: 5px;
+}
+
+.module-panel .tags li {
+  float: left;
+  list-style: none;
+  line-height: 14px;
+  margin: 15px 15px 0 0;
+}
+
+.module-panel .tags {
+  padding: 0 0 15px 15px;
+}
+
+/* end side module */
